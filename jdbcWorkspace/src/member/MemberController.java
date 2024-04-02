@@ -55,8 +55,10 @@ public class MemberController {
 			String modifyDate = rs.getString("MODIFY_DATE");
 			String quitYn = rs.getString("QUIT_YN");
 			String adminYn = rs.getString("ADMIN_YN");
+			
 			MemberVo vo = new MemberVo(no, id, pwd, nick, joindate, modifyDate, quitYn, adminYn);
-			System.out.println(vo);
+			Main.loginMember = vo;
+			System.out.println(vo.getNick() + "님, 환영합니다.");
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

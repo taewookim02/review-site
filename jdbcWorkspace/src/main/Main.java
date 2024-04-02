@@ -3,10 +3,12 @@ package main;
 import java.util.Scanner;
 
 import member.MemberController;
+import member.MemberVo;
 
 public class Main {
 	public static final Scanner SC = new Scanner(System.in);
 	public static MemberVo loginMember = null;
+
 	public static void main(String[] args) {
 		MemberController mc = new MemberController();
 

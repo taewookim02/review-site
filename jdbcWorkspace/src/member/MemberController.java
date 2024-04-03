@@ -46,7 +46,6 @@ public class MemberController {
 			System.out.println("4. 회원 전체 목록");
 			System.out.println("5. 회원 상세 조회");
 			System.out.println("9. 이전 메뉴로 돌아가기");
-			// 회원 상세 조회 (관리자 전용)
 
 			System.out.print("메뉴 번호: ");
 			String menu = Main.SC.nextLine();
@@ -66,6 +65,10 @@ public class MemberController {
 			case "4":
 				// 회원 전체 목록 조회 (관리자 전용)
 				selectAllMembers();
+				break;
+			case "5":
+				// 회원 상세 조회 (관리자 전용)
+				selectOneMember();
 				break;
 			case "9":
 				System.out.println("=============");
@@ -118,6 +121,44 @@ public class MemberController {
 				break;
 			}
 		}
+	}
+
+	private void selectOneMember() {
+		try {
+			Connection conn = JDBCTemplate.getConn();
+			String sql = "SELECT * FROM MEMBER WHERE NO = ?";
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+
+			System.out.print("조회할 회원 번호: ");
+			String inputNo = Main.SC.nextLine();
+			pstmt.setString(1, inputNo);
+
+			ResultSet rs = pstmt.executeQuery();
+			MemberVo vo = null;
+			if (rs.next()) {
+				String no = rs.getString("NO");
+				String id = rs.getString("ID");
+				String pwd = rs.getString("PWD");
+				String nick = rs.getString("NICK");
+				String joinDate = rs.getString("JOIN_DATE");
+				String modifyDate = rs.getString("MODIFY_DATE");
+				String quitYn = rs.getString("QUIT_YN");
+				String adminYn = rs.getString("ADMIN_YN");
+				vo = new MemberVo(no, id, pwd, nick, joinDate, modifyDate, quitYn, adminYn);
+			}
+			
+			if (vo == null) {
+				System.out.println("회원 조회 실패");
+				return;
+			}
+
+			System.out.println(vo);
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 	private void selectAllMembers() {

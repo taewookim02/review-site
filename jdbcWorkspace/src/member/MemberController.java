@@ -3,6 +3,7 @@ package member;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 import main.Main;
 import util.JDBCTemplate;
@@ -15,6 +16,8 @@ public class MemberController {
 			System.out.println("====MEMBER====");
 			System.out.println("1. 로그인");
 			System.out.println("2. 회원가입");
+			System.out.println("9. 이전 메뉴로 돌아가기");
+
 			System.out.print("메뉴 번호: ");
 			String menu = Main.SC.nextLine();
 
@@ -25,6 +28,11 @@ public class MemberController {
 			case "2":
 				join();
 				break;
+			case "9":
+				System.out.println("=============");
+				System.out.println("이전 메뉴로..");
+				System.out.println("=============");
+				return;
 			default:
 				System.out.println("잘못 입력하셨습니다.");
 				break;
@@ -38,7 +46,6 @@ public class MemberController {
 			System.out.println("4. 회원 전체 목록");
 			System.out.println("5. 회원 상세 조회");
 			System.out.println("9. 이전 메뉴로 돌아가기");
-			// 회원 전체 목록 조회 (관리자 전용)
 			// 회원 상세 조회 (관리자 전용)
 
 			System.out.print("메뉴 번호: ");
@@ -55,6 +62,10 @@ public class MemberController {
 			case "3":
 				// 정보 수정 (닉네임 변경)
 				changeNick();
+				break;
+			case "4":
+				// 회원 전체 목록 조회 (관리자 전용)
+				selectAllMembers();
 				break;
 			case "9":
 				System.out.println("=============");
@@ -109,6 +120,47 @@ public class MemberController {
 		}
 	}
 
+	private void selectAllMembers() {
+		try {
+			Connection conn = JDBCTemplate.getConn();
+			String sql = "SELECT * FROM MEMBER ORDER BY NO ASC";
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+
+			ResultSet rs = pstmt.executeQuery();
+			ArrayList<MemberVo> voList = new ArrayList<>();
+
+			while (rs.next()) {
+				String no = rs.getString("NO");
+				String id = rs.getString("ID");
+				String pwd = rs.getString("PWD");
+				String nick = rs.getString("NICK");
+				String joinDate = rs.getString("JOIN_DATE");
+				String modifyDate = rs.getString("MODIFY_DATE");
+				String quitYn = rs.getString("QUIT_YN");
+				String adminYn = rs.getString("ADMIN_YN");
+
+				MemberVo vo = new MemberVo(no, id, pwd, nick, joinDate, modifyDate, quitYn, adminYn);
+				voList.add(vo);
+			}
+
+			if (voList.isEmpty()) {
+				System.out.println("=============");
+				System.out.println("회원 목록 조회 실패");
+				System.out.println("=============");
+				return;
+			}
+
+			for (MemberVo reVo : voList) {
+				System.out.println(reVo);
+			}
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
 	private void deleteMember() {
 		try {
 			String pwd = Main.loginMember.getPwd();
@@ -118,7 +170,9 @@ public class MemberController {
 			String inputPwd = Main.SC.nextLine();
 
 			if (!inputPwd.equals(pwd)) {
+				System.out.println("=============");
 				System.out.println("비밀번호가 다릅니다.");
+				System.out.println("=============");
 				return;
 			}
 

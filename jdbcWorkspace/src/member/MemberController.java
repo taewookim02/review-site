@@ -37,8 +37,6 @@ public class MemberController {
 			System.out.println("3. 닉네임 변경");
 			System.out.println("4. 회원 전체 목록");
 			System.out.println("5. 회원 상세 조회");
-			// 정보 수정 (비번 변경)
-			// 정보 수정 (닉네임 변경)
 			// 회원 전체 목록 조회 (관리자 전용)
 			// 회원 상세 조회 (관리자 전용)
 
@@ -50,7 +48,12 @@ public class MemberController {
 				logout();
 				break;
 			case "2":
+				// 정보 수정 (비번 변경)
 				changePwd();
+				break;
+			case "3":
+				// 정보 수정 (닉네임 변경)
+				changeNick();
 				break;
 
 			default:
@@ -61,16 +64,25 @@ public class MemberController {
 		} else if (Main.loginMember != null) {
 			// 그냥 회원
 			System.out.println("1. 로그아웃");
-			// 로그아웃
-			// 정보 수정 (비번 변경)
-			// 정보 수정 (닉네임 변경)
+			System.out.println("2. 비밀번호 변경");
+			System.out.println("3. 닉네임 변경");
+
 			// 회원 탈퇴
 			System.out.print("메뉴 번호: ");
 			String menu = Main.SC.nextLine();
 
 			switch (menu) {
 			case "1":
+				// 로그아웃
 				logout();
+				break;
+			case "2":
+				// 정보 수정 (비번 변경)
+				changePwd();
+				break;
+			case "3":
+				// 정보 수정 (닉네임 변경)
+				changeNick();
 				break;
 
 			default:
@@ -78,11 +90,35 @@ public class MemberController {
 				break;
 			}
 		}
+	}
+
+	private void changeNick() {
+		try {
+			Connection conn = JDBCTemplate.getConn();
+			String sql = "UPDATE MEMBER SET NICK = ? WHERE NO = ?";
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+
+			System.out.print("새로운 닉네임: ");
+			String inputNick = Main.SC.nextLine();
+			pstmt.setString(1, inputNick);
+			pstmt.setString(2, Main.loginMember.getNo());
+
+			int r = pstmt.executeUpdate();
+
+			if (r != 1) {
+				System.out.println("닉네임 변경 실패");
+				return;
+			}
+			
+			System.out.println("닉네임 변경 성공!");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 
 	private void changePwd() {
-		// TODO Auto-generated method stub
 		try {
 			Connection conn = JDBCTemplate.getConn();
 			String sql = "UPDATE MEMBER SET PWD = ? WHERE NO = ?";

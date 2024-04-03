@@ -146,13 +146,24 @@ public class MemberController {
 				String adminYn = rs.getString("ADMIN_YN");
 				vo = new MemberVo(no, id, pwd, nick, joinDate, modifyDate, quitYn, adminYn);
 			}
-			
+
 			if (vo == null) {
+				System.out.println("=============");
 				System.out.println("회원 조회 실패");
+				System.out.println("=============");
 				return;
 			}
 
-			System.out.println(vo);
+			System.out.println("-".repeat(99));
+
+			String joinDateFormatted = vo.getJoin_date().split(" ")[0];
+			String modifyDateDays = vo.getModify_date() == null ? "null" : vo.getModify_date().split(" ")[0];
+
+			System.out.printf("%-5s | %-15s | %-10s | %-15s | %-15s | %-5s | %-5s%n", "No", "Id", "Password",
+					"Joined Date", "Modify Date", "Quit", "Admin");
+			System.out.printf("%-5s | %-15s | %-10s | %-15s | %-15s | %-5s | %-5s%n", vo.getNo(), vo.getId(),
+					vo.getPwd(), joinDateFormatted, modifyDateDays, vo.getQuit_yn(), vo.getAdmin_yn());
+			System.out.println("-".repeat(99));
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -191,9 +202,19 @@ public class MemberController {
 				return;
 			}
 
+			System.out.println("-".repeat(99));
+			System.out.printf("%-5s | %-15s | %-10s | %-15s | %-15s | %-5s | %-5s%n", "No", "Id", "Password",
+					"Joined Date", "Modify Date", "Quit", "Admin");
 			for (MemberVo reVo : voList) {
-				System.out.println(reVo);
+				System.out.println("-".repeat(99));
+
+				String joinDateFormatted = reVo.getJoin_date().split(" ")[0];
+				String modifyDateDays = reVo.getModify_date() == null ? "null" : reVo.getModify_date().split(" ")[0];
+
+				System.out.printf("%-5s | %-15s | %-10s | %-15s | %-15s | %-5s | %-5s%n", reVo.getNo(), reVo.getId(),
+						reVo.getPwd(), joinDateFormatted, modifyDateDays, reVo.getQuit_yn(), reVo.getAdmin_yn());
 			}
+			System.out.println("-".repeat(99));
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -256,11 +277,15 @@ public class MemberController {
 			int r = pstmt.executeUpdate();
 
 			if (r != 1) {
+				System.out.println("=============");
 				System.out.println("닉네임 변경 실패");
+				System.out.println("=============");
 				return;
 			}
 
+			System.out.println("=============");
 			System.out.println("닉네임 변경 성공!");
+			System.out.println("=============");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

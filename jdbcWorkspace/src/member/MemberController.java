@@ -10,22 +10,107 @@ import util.JDBCTemplate;
 public class MemberController {
 
 	public void printMenu() {
-		System.out.println("====MEMBER====");
-		System.out.println("1. 로그인");
-		System.out.println("2. 회원가입");
-		System.out.print("메뉴 번호: ");
-		String menu = Main.SC.nextLine();
 
-		switch (menu) {
-		case "1":
-			login();
-			break;
-		case "2":
-			join();
-			break;
-		default:
-			break;
+		if (Main.loginMember == null) {
+			System.out.println("====MEMBER====");
+			System.out.println("1. 로그인");
+			System.out.println("2. 회원가입");
+			System.out.print("메뉴 번호: ");
+			String menu = Main.SC.nextLine();
+
+			switch (menu) {
+			case "1":
+				login();
+				break;
+			case "2":
+				join();
+				break;
+			default:
+				System.out.println("잘못 입력하셨습니다.");
+				break;
+			}
+		} else if (Main.loginMember.getAdmin_yn().equals("Y")) {
+			// 관리자멤버 일 때
+			System.out.println("====관리자메뉴====");
+			System.out.println("1. 로그아웃");
+			System.out.println("2. 비밀번호 변경");
+			System.out.println("3. 닉네임 변경");
+			System.out.println("4. 회원 전체 목록");
+			System.out.println("5. 회원 상세 조회");
+			// 정보 수정 (비번 변경)
+			// 정보 수정 (닉네임 변경)
+			// 회원 전체 목록 조회 (관리자 전용)
+			// 회원 상세 조회 (관리자 전용)
+
+			System.out.print("메뉴 번호: ");
+			String menu = Main.SC.nextLine();
+			switch (menu) {
+			case "1":
+				// 로그아웃
+				logout();
+				break;
+			case "2":
+				changePwd();
+				break;
+
+			default:
+				System.out.println("잘못 입력하셨습니다.");
+				break;
+			}
+
+		} else if (Main.loginMember != null) {
+			// 그냥 회원
+			System.out.println("1. 로그아웃");
+			// 로그아웃
+			// 정보 수정 (비번 변경)
+			// 정보 수정 (닉네임 변경)
+			// 회원 탈퇴
+			System.out.print("메뉴 번호: ");
+			String menu = Main.SC.nextLine();
+
+			switch (menu) {
+			case "1":
+				logout();
+				break;
+
+			default:
+				System.out.println("잘못 입력하셨습니다.");
+				break;
+			}
 		}
+
+	}
+
+	private void changePwd() {
+		// TODO Auto-generated method stub
+		try {
+			Connection conn = JDBCTemplate.getConn();
+			String sql = "UPDATE MEMBER SET PWD = ? WHERE NO = ?";
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+
+			System.out.print("새로운 비밀번호: ");
+			String inputPwd = Main.SC.nextLine();
+			pstmt.setString(1, inputPwd);
+			pstmt.setString(2, Main.loginMember.getNo());
+
+			int r = pstmt.executeUpdate();
+
+			if (r != 1) {
+				System.out.println("비밀번호 변경 실패");
+				return;
+			}
+
+			System.out.println("비밀번호 변경 성공!");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	private void logout() {
+		Main.loginMember = null;
+		System.out.println("로그아웃 완료.");
 	}
 
 	private void login() {
@@ -40,13 +125,13 @@ public class MemberController {
 			String inputPwd = Main.SC.nextLine();
 			pstmt.setString(1, inputId);
 			pstmt.setString(2, inputPwd);
-			
+
 			ResultSet rs = pstmt.executeQuery();
 			if (!rs.next()) {
 				System.out.println("로그인 실패.");
 				return;
 			}
-			
+
 			String no = rs.getString("NO");
 			String id = rs.getString("ID");
 			String pwd = rs.getString("PWD");
@@ -55,11 +140,11 @@ public class MemberController {
 			String modifyDate = rs.getString("MODIFY_DATE");
 			String quitYn = rs.getString("QUIT_YN");
 			String adminYn = rs.getString("ADMIN_YN");
-			
+
 			MemberVo vo = new MemberVo(no, id, pwd, nick, joindate, modifyDate, quitYn, adminYn);
 			Main.loginMember = vo;
 			System.out.println(vo.getNick() + "님, 환영합니다.");
-			
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -4,14 +4,18 @@ import java.util.Scanner;
 
 import member.MemberController;
 import member.MemberVo;
+import normalProd.NormalProdController;
 
 public class Main {
 	public static final Scanner SC = new Scanner(System.in);
 	public static MemberVo loginMember = null;
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception  {
 		MemberController mc = new MemberController();
-
+		NormalProdController nc = new NormalProdController(); 
+		
+		
+		
 		System.out.println("====MENU====");
 		while (true) {
 			System.out.println("1. MEMBER");
@@ -26,7 +30,7 @@ public class Main {
 				mc.printMenu();
 				break;
 			case "2":
-				System.out.println("구현중..");
+				nc.printMenu();
 				break;
 			case "9":
 				System.out.println("프로그램 종료");

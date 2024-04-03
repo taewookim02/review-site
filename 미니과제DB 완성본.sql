@@ -1,5 +1,5 @@
 --------------------------------
----------- Ω√ƒˆΩ∫ ªË¡¶-----------
+---------- ÏãúÌÄÄÏä§ ÏÇ≠Ï†ú-----------
 --------------------------------
 DROP SEQUENCE SEQ_MEMBER_NO;
 DROP SEQUENCE SEQ_BOOSTER_PROD_NO;
@@ -14,7 +14,7 @@ DROP SEQUENCE SEQ_BOARD_NO;
 
 
 --------------------------------
----------- Ω√ƒˆΩ∫ ª˝º∫ -----------
+---------- ÏãúÌÄÄÏä§ ÏÉùÏÑ± -----------
 --------------------------------
 CREATE SEQUENCE SEQ_MEMBER_NO NOCACHE NOCYCLE;
 CREATE SEQUENCE SEQ_BOOSTER_PROD_NO NOCACHE NOCYCLE;
@@ -28,7 +28,7 @@ CREATE SEQUENCE SEQ_BOARD_NO NOCACHE NOCYCLE;
 
 
 --------------------------------
----------- ≈◊¿Ã∫Ì ªË¡¶ -----------
+---------- ÌÖåÏù¥Î∏î ÏÇ≠Ï†ú -----------
 --------------------------------
 DROP TABLE MEMBER CASCADE CONSTRAINTS;
 DROP TABLE BOOSTER_PRODUCT cascade constraints;
@@ -43,13 +43,13 @@ DROP TABLE BOARD CASCADE CONSTRAINTS;
 
 
 --------------------------------
----------- ≈◊¿Ã∫Ì ª˝º∫ -----------
+---------- ÌÖåÏù¥Î∏î ÏÉùÏÑ± -----------
 --------------------------------
 CREATE TABLE MEMBER(
     NO                      NUMBER          CONSTRAINT PK_MEMBER_NO PRIMARY KEY
     , ID                    VARCHAR2(100)   CONSTRAINT NN_MEMBER_ID NOT NULL CONSTRAINT UQ_MEMBER_ID UNIQUE
     , PWD                   VARCHAR2(100)   CONSTRAINT NN_MEMBER_PWD NOT NULL
-    , NICK                  VARCHAR2(100)   CONSTRAINT NN_MEMBER_NICK NOT NULL --øÏ∏Æ ªÁ¿Ã∆Æ¥¬ ¥–≥◊¿” ¡ﬂ∫π¿∫ «„øÎ«“∞≈¿”
+    , NICK                  VARCHAR2(100)   CONSTRAINT NN_MEMBER_NICK NOT NULL --Ïö∞Î¶¨ ÏÇ¨Ïù¥Ìä∏Îäî ÎãâÎÑ§ÏûÑ Ï§ëÎ≥µÏùÄ ÌóàÏö©Ìï†Í±∞ÏûÑ
     , JOIN_DATE             TIMESTAMP       DEFAULT SYSDATE
     , MODIFY_DATE           TIMESTAMP       
     , QUIT_YN               CHAR(1)         DEFAULT 'N' CONSTRAINT CK_MEMBER_QUIT CHECK( QUIT_YN IN ('Y','N')  )
@@ -66,6 +66,7 @@ CREATE TABLE BOOSTER_PRODUCT (
 
 CREATE TABLE BOOSTER_REVIEW (
    BOOSTER_REVIEW_NO         NUMBER         PRIMARY KEY,
+   REVIEW_TITLE              VARCHAR2(100),
    REVIEW                    VARCHAR2(1000) NULL,
    BOOSTER_PROD_NO           NUMBER,
    MEMBER_NO                 NUMBER,
@@ -83,6 +84,7 @@ CREATE TABLE NORMAL_PRODUCT (
 
 CREATE TABLE NORMAL_REVIEW (
    NORMAL_REVIEW_NO         NUMBER          PRIMARY KEY,
+   REVIEW_TITLE             VARCHAR2(100),
    REVIEW                   VARCHAR2(1000)  NULL,
    NORMAL_PROD_NO           NUMBER,
    WRITER_NO                NUMBER,
@@ -100,6 +102,7 @@ CREATE TABLE FOOD_PRODUCT (
 
 CREATE TABLE FOOD_REVIEW (
 	FOOD_REVIEW_NO	        NUMBER          PRIMARY KEY,
+  REVIEW_TITLE            VARCHAR2(100),
 	REVIEW	                VARCHAR2(1000)	NULL,
 	FOOD_PROD_NO	        NUMBER,
 	WRITER_NO	            NUMBER	,
@@ -129,7 +132,7 @@ CREATE TABLE BOARD (
 
 
 --------------------------------
----------- ø‹∑°≈∞ √ﬂ∞° -----------
+---------- Ïô∏ÎûòÌÇ§ Ï∂îÍ∞Ä -----------
 --------------------------------
 
 ALTER TABLE BOOSTER_REVIEW
@@ -159,9 +162,13 @@ ADD CONSTRAINT FK_MEMBER_TO_ANNOUNCEMENT_BOARD_NO FOREIGN KEY (WRITER_NO)REFEREN
 
 
 --------------------------------
----------- µ•¿Ã≈Õ ª¿‘ -----------
+---------- Îç∞Ïù¥ÌÑ∞ ÏÇΩÏûÖ -----------
 --------------------------------
-INSERT INTO MEMBER(NO, ID, PWD, NICK, ADMIN_YN) VALUES(SEQ_MEMBER_NO.NEXTVAL, 'admin', '1234', '∞¸∏Æ¿⁄', 'Y'); -- ∞¸∏Æ¿⁄∞Ë¡§ ª¿‘
-
+INSERT INTO MEMBER(NO, ID, PWD, NICK, ADMIN_YN) VALUES(SEQ_MEMBER_NO.NEXTVAL, 'admin', '1234', 'Í¥ÄÎ¶¨Ïûê', 'Y'); -- Í¥ÄÎ¶¨ÏûêÍ≥ÑÏ†ï ÏÇΩÏûÖ
 
 COMMIT;
+
+
+
+
+

@@ -218,7 +218,7 @@ public class MemberController {
 			}
 
 			Connection conn = JDBCTemplate.getConn();
-			String sql = "UPDATE MEMBER SET QUIT_YN = 'Y' WHERE NO = ?";
+			String sql = "UPDATE MEMBER SET QUIT_YN = 'Y', MODIFY_DATE = SYSDATE WHERE NO = ?";
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 
 			pstmt.setString(1, Main.loginMember.getNo());
@@ -245,7 +245,7 @@ public class MemberController {
 	private void changeNick() {
 		try {
 			Connection conn = JDBCTemplate.getConn();
-			String sql = "UPDATE MEMBER SET NICK = ? WHERE NO = ?";
+			String sql = "UPDATE MEMBER SET NICK = ?, MODIFY_DATE = SYSDATE WHERE NO = ?";
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 
 			System.out.print("새로운 닉네임: ");
@@ -271,7 +271,7 @@ public class MemberController {
 	private void changePwd() {
 		try {
 			Connection conn = JDBCTemplate.getConn();
-			String sql = "UPDATE MEMBER SET PWD = ? WHERE NO = ?";
+			String sql = "UPDATE MEMBER SET PWD = ?, MODIFY_DATE = SYSDATE WHERE NO = ?";
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 
 			System.out.print("새로운 비밀번호: ");

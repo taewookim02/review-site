@@ -4,17 +4,19 @@ public class FoodReviewVo {
 	
 	
 	private String foodReviewNo;
-	private String rewview;
+	private String reviewTitle;
+	private String review;
 	private String foodProdNo;
 	private String writerNo;
 	private String enrollDate;
 	private String quityn;
 	
-	public FoodReviewVo(String foodReviewNo, String rewview, String foodProdNo, String writerNo, String enrollDate,
-			String quityn) {
+	public FoodReviewVo(String foodReviewNo, String reviewTitle, String review, String foodProdNo, String writerNo,
+			String enrollDate, String quityn) {
 		super();
 		this.foodReviewNo = foodReviewNo;
-		this.rewview = rewview;
+		this.reviewTitle = reviewTitle;
+		this.review = review;
 		this.foodProdNo = foodProdNo;
 		this.writerNo = writerNo;
 		this.enrollDate = enrollDate;
@@ -34,12 +36,20 @@ public class FoodReviewVo {
 		this.foodReviewNo = foodReviewNo;
 	}
 
-	public String getRewview() {
-		return rewview;
+	public String getReviewTitle() {
+		return reviewTitle;
 	}
 
-	public void setRewview(String rewview) {
-		this.rewview = rewview;
+	public void setReviewTitle(String reviewTitle) {
+		this.reviewTitle = reviewTitle;
+	}
+
+	public String getReview() {
+		return review;
+	}
+
+	public void setReview(String review) {
+		this.review = review;
 	}
 
 	public String getFoodProdNo() {
@@ -76,10 +86,12 @@ public class FoodReviewVo {
 
 	@Override
 	public String toString() {
-		return "FoodReviewVo [foodReviewNo=" + foodReviewNo + ", rewview=" + rewview + ", foodProdNo=" + foodProdNo
-				+ ", writerNo=" + writerNo + ", enrollDate=" + enrollDate + ", quityn=" + quityn + "]";
+		return "FoodReviewVo [foodReviewNo=" + foodReviewNo + ", reviewTitle=" + reviewTitle + ", review=" + review
+				+ ", foodProdNo=" + foodProdNo + ", writerNo=" + writerNo + ", enrollDate=" + enrollDate + ", quityn="
+				+ quityn + "]";
 	}
 	
+		
 	
 	
 	

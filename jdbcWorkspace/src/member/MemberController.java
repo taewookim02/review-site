@@ -37,6 +37,7 @@ public class MemberController {
 			System.out.println("3. 닉네임 변경");
 			System.out.println("4. 회원 전체 목록");
 			System.out.println("5. 회원 상세 조회");
+			System.out.println("9. 이전 메뉴로 돌아가기");
 			// 회원 전체 목록 조회 (관리자 전용)
 			// 회원 상세 조회 (관리자 전용)
 
@@ -55,6 +56,11 @@ public class MemberController {
 				// 정보 수정 (닉네임 변경)
 				changeNick();
 				break;
+			case "9":
+				System.out.println("=============");
+				System.out.println("이전 메뉴로..");
+				System.out.println("=============");
+				return;
 
 			default:
 				System.out.println("잘못 입력하셨습니다.");
@@ -63,11 +69,13 @@ public class MemberController {
 
 		} else if (Main.loginMember != null) {
 			// 그냥 회원
+			System.out.println("====" + Main.loginMember.getNick() + "====");
 			System.out.println("1. 로그아웃");
 			System.out.println("2. 비밀번호 변경");
 			System.out.println("3. 닉네임 변경");
+			System.out.println("4. 회원탈퇴");
+			System.out.println("9. 이전 메뉴로 돌아가기");
 
-			// 회원 탈퇴
 			System.out.print("메뉴 번호: ");
 			String menu = Main.SC.nextLine();
 
@@ -84,11 +92,58 @@ public class MemberController {
 				// 정보 수정 (닉네임 변경)
 				changeNick();
 				break;
+			case "4":
+				// 회원탈퇴
+				deleteMember();
+				break;
+			case "9":
+				System.out.println("=============");
+				System.out.println("이전 메뉴로..");
+				System.out.println("=============");
+				return;
 
 			default:
 				System.out.println("잘못 입력하셨습니다.");
 				break;
 			}
+		}
+	}
+
+	private void deleteMember() {
+		try {
+			String pwd = Main.loginMember.getPwd();
+			System.out.println("=============");
+			System.out.println("탈퇴하실려면 비밀번호를 입력해주세요.");
+			System.out.print("비밀번호: ");
+			String inputPwd = Main.SC.nextLine();
+
+			if (!inputPwd.equals(pwd)) {
+				System.out.println("비밀번호가 다릅니다.");
+				return;
+			}
+
+			Connection conn = JDBCTemplate.getConn();
+			String sql = "UPDATE MEMBER SET QUIT_YN = 'Y' WHERE NO = ?";
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+
+			pstmt.setString(1, Main.loginMember.getNo());
+
+			int r = pstmt.executeUpdate();
+
+			if (r != 1) {
+				System.out.println("=============");
+				System.out.println("회원탈퇴 실패");
+				System.out.println("=============");
+				return;
+			}
+
+			System.out.println("=============");
+			System.out.println("회원탈퇴 성공");
+			System.out.println("=============");
+			logout();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -109,7 +164,7 @@ public class MemberController {
 				System.out.println("닉네임 변경 실패");
 				return;
 			}
-			
+
 			System.out.println("닉네임 변경 성공!");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -132,11 +187,15 @@ public class MemberController {
 			int r = pstmt.executeUpdate();
 
 			if (r != 1) {
+				System.out.println("=============");
 				System.out.println("비밀번호 변경 실패");
+				System.out.println("=============");
 				return;
 			}
 
+			System.out.println("=============");
 			System.out.println("비밀번호 변경 성공!");
+			System.out.println("=============");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -146,7 +205,9 @@ public class MemberController {
 
 	private void logout() {
 		Main.loginMember = null;
+		System.out.println("=============");
 		System.out.println("로그아웃 완료.");
+		System.out.println("=============");
 	}
 
 	private void login() {
@@ -164,7 +225,9 @@ public class MemberController {
 
 			ResultSet rs = pstmt.executeQuery();
 			if (!rs.next()) {
+				System.out.println("=============");
 				System.out.println("로그인 실패.");
+				System.out.println("=============");
 				return;
 			}
 
@@ -178,8 +241,20 @@ public class MemberController {
 			String adminYn = rs.getString("ADMIN_YN");
 
 			MemberVo vo = new MemberVo(no, id, pwd, nick, joindate, modifyDate, quitYn, adminYn);
+
+			if (vo.getQuit_yn().equals("Y")) {
+				// 탈퇴한 회원일 때
+				System.out.println("=============");
+				System.out.println("탈퇴한 회원입니다.");
+				System.out.println("=============");
+				return;
+			}
+
 			Main.loginMember = vo;
+
+			System.out.println("=============");
 			System.out.println(vo.getNick() + "님, 환영합니다.");
+			System.out.println("=============");
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -208,10 +283,14 @@ public class MemberController {
 			int r = pstmt.executeUpdate();
 
 			if (r != 1) {
+				System.out.println("=============");
 				System.out.println("회원가입 오류.");
+				System.out.println("=============");
 				return;
 			}
+			System.out.println("=============");
 			System.out.println("회원가입 성공!");
+			System.out.println("=============");
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

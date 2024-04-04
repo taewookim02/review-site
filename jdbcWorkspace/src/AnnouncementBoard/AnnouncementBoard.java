@@ -111,7 +111,7 @@ public class AnnouncementBoard {
 
 			Connection conn = JDBCTemplate.getConn();
 
-			String sql = "UPDATE ANNOUNCEMENT_BOARD SET DEL_YN = 'Y' WHERE NO = ?";
+			String sql = "UPDATE ANNOUNCEMENT_BOARD SET DEL_YN = 'Y' WHERE NO = ? AND DEL_YN = 'N'";
 			System.out.print("삭제할 게시물 번호 : ");
 			String no = Main.SC.nextLine();
 
@@ -207,7 +207,7 @@ public class AnnouncementBoard {
 
 		Connection conn = JDBCTemplate.getConn();
 
-		String sql = "SELECT NO, TITLE, ENROLL_DATE FROM ANNOUNCEMENT_BOARD";
+		String sql = "SELECT NO, TITLE, ENROLL_DATE FROM ANNOUNCEMENT_BOARD WHERE DEL_YN = 'N'";
 
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		ResultSet rs = pstmt.executeQuery();
@@ -228,6 +228,7 @@ public class AnnouncementBoard {
 		for (AnnouncementBoardVo vo : voList) {
 			System.out.printf("%-5s | %-12s | %-20s%n", vo.getNo(), vo.getTitle(), vo.getEnrollDate());
 		}
+		System.out.println("");
 
 	}
 
@@ -235,7 +236,7 @@ public class AnnouncementBoard {
 
 		Connection conn = JDBCTemplate.getConn();
 
-		String sql = "SELECT NO, TITLE, CONTENT, ENROLL_DATE FROM ANNOUNCEMENT_BOARD WHERE NO = ?";
+		String sql = "SELECT NO, TITLE, CONTENT, ENROLL_DATE FROM ANNOUNCEMENT_BOARD WHERE NO = ? AND DEL_YN = 'N'";
 
 		System.out.print("공지사항 번호 선택 : ");
 		String no = Main.SC.nextLine();
@@ -262,6 +263,7 @@ public class AnnouncementBoard {
 			System.out.printf("%-5s | %-12s | %-20s | %-20s%n ", vo.getNo(), vo.getTitle(), vo.getContent(),
 					vo.getEnrollDate());
 		}
+		System.out.println("");
 
 	}
 
@@ -269,7 +271,7 @@ public class AnnouncementBoard {
 
 		Connection conn = JDBCTemplate.getConn();
 
-		String sql = "SELECT NO, TITLE, CONTENT, ENROLL_DATE FROM ANNOUNCEMENT_BOARD WHERE TO_CHAR(ENROLL_DATE, 'YYYY\"년\" MM\"월\" DD\"일\"') LIKE '%' || ? || '%'";
+		String sql = "SELECT NO, TITLE, CONTENT, ENROLL_DATE FROM ANNOUNCEMENT_BOARD WHERE DEL_YN = 'N' AND TO_CHAR(ENROLL_DATE, 'YYYY\"년\" MM\"월\" DD\"일\"') LIKE '%' || ? || '%'";
 
 		System.out.print("조회할 날짜 (0000년 00월 00일) : ");
 		String no = Main.SC.nextLine();
@@ -296,6 +298,7 @@ public class AnnouncementBoard {
 			System.out.printf("%-5s | %-12s | %-20s | %-20s%n ", vo.getNo(), vo.getTitle(), vo.getContent(),
 					vo.getEnrollDate());
 		}
+		System.out.println("");
 
 	}
 

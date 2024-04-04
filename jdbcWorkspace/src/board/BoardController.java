@@ -96,7 +96,7 @@ public class BoardController {
 	private void userDelete() throws Exception {
 		Connection conn = JDBCTemplate.getConn();
 
-		String sql = "UPDATE BOARD SET DEL_YN = 'Y' WHERE NO = ? AND WRITER_NO = ?";
+		String sql = "UPDATE BOARD SET DEL_YN = 'Y' WHERE NO = ? AND WRITER_NO = ? AND DEL_YN = 'N'";
 		System.out.print("삭제할 게시물 번호 : ");
 		String no = Main.SC.nextLine();
 
@@ -116,7 +116,7 @@ public class BoardController {
 	private void adminDelete() throws Exception {
 		Connection conn = JDBCTemplate.getConn();
 
-		String sql = "UPDATE BOARD SET DEL_YN = 'Y' WHERE NO = ?";
+		String sql = "UPDATE BOARD SET DEL_YN = 'Y' WHERE NO = ?  AND DEL_YN = 'N'";
 		System.out.print("삭제할 게시물 번호 : ");
 		String no = Main.SC.nextLine();
 
@@ -299,7 +299,7 @@ public class BoardController {
 
 		Connection conn = JDBCTemplate.getConn();
 
-		String sql = "SELECT B.NO, B.TITLE, B.ENROLL_DATE FROM BOARD B JOIN MEMBER M ON M.NO = B.WRITER_NO WHERE M.NICK = ?";
+		String sql = "SELECT B.NO, B.TITLE, B.ENROLL_DATE FROM BOARD B JOIN MEMBER M ON M.NO = B.WRITER_NO WHERE M.NICK = ? AND DEL_YN = 'N'";
 
 		System.out.print("조회할 닉네임 : ");
 		String nick = Main.SC.nextLine();

@@ -3,11 +3,23 @@ package normalReview;
 public class NormalReviewVo {
 	
 	private String normalReviewlNo;
+	private String normalReviewTilte;
 	private String normalReview;
 	private String normalProdNo;
 	private String writerNo;
 	private String enrollDate;
 	private String quityn;
+	public NormalReviewVo(String normalReviewlNo, String normalReviewTilte, String normalReview, String normalProdNo,
+			String writerNo, String enrollDate, String quityn) {
+		super();
+		this.normalReviewlNo = normalReviewlNo;
+		this.normalReviewTilte = normalReviewTilte;
+		this.normalReview = normalReview;
+		this.normalProdNo = normalProdNo;
+		this.writerNo = writerNo;
+		this.enrollDate = enrollDate;
+		this.quityn = quityn;
+	}
 	public NormalReviewVo() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -17,6 +29,12 @@ public class NormalReviewVo {
 	}
 	public void setNormalReviewlNo(String normalReviewlNo) {
 		this.normalReviewlNo = normalReviewlNo;
+	}
+	public String getNormalReviewTilte() {
+		return normalReviewTilte;
+	}
+	public void setNormalReviewTilte(String normalReviewTilte) {
+		this.normalReviewTilte = normalReviewTilte;
 	}
 	public String getNormalReview() {
 		return normalReview;
@@ -33,22 +51,6 @@ public class NormalReviewVo {
 	public String getWriterNo() {
 		return writerNo;
 	}
-	public NormalReviewVo(String normalReviewlNo, String normalReview, String normalProdNo, String writerNo,
-			String enrollDate, String quityn) {
-		super();
-		this.normalReviewlNo = normalReviewlNo;
-		this.normalReview = normalReview;
-		this.normalProdNo = normalProdNo;
-		this.writerNo = writerNo;
-		this.enrollDate = enrollDate;
-		this.quityn = quityn;
-	}
-	@Override
-	public String toString() {
-		return "NormalReviewVo [normalReviewlNo=" + normalReviewlNo + ", normalReview=" + normalReview
-				+ ", normalProdNo=" + normalProdNo + ", writerNo=" + writerNo + ", enrollDate=" + enrollDate
-				+ ", quityn=" + quityn + "]";
-	}
 	public void setWriterNo(String writerNo) {
 		this.writerNo = writerNo;
 	}
@@ -64,5 +66,12 @@ public class NormalReviewVo {
 	public void setQuityn(String quityn) {
 		this.quityn = quityn;
 	}
-
+	@Override
+	public String toString() {
+		return "NormalReviewVo [normalReviewlNo=" + normalReviewlNo + ", normalReviewTilte=" + normalReviewTilte
+				+ ", normalReview=" + normalReview + ", normalProdNo=" + normalProdNo + ", writerNo=" + writerNo
+				+ ", enrollDate=" + enrollDate + ", quityn=" + quityn + "]";
+	}
+	
+	
 }

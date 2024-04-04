@@ -46,7 +46,7 @@ public class NormalProdController {
 		
 		Connection conn = JDBCTemplate.getConn();
 		
-		String sql = "SELECT * FROM NORMAL_PRODUCT ORDER BY NOEMAL_PROD_NO DESC";
+		String sql = "SELECT * FROM NORMAL_PRODUCT ORDER BY NORMAL_PROD_NO DESC";
 		
 		PreparedStatement pstmt =conn.prepareStatement(sql);
 		

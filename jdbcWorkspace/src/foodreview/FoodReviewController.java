@@ -180,6 +180,41 @@ public class FoodReviewController {
 
 	public void lookUp() throws Exception {
 		
+		if(Main.loginMember != null && Main.loginMember.getAdmin_yn().equals("Y")) {
+			Connection conn1 = JDBCTemplate.getConn();
+			
+			String sql1= "SELECT R.FOOD_REVIEW_NO, R.REVIEW_TITLE, M.NICK ,TO_CHAR(R.ENROLL_DATE, 'YYYY-MM-DD HH:MI:SS') AS ENROLL_DATE FROM FOOD_REVIEW R JOIN MEMBER M ON R.WRITER_NO = M.NO"; 
+			
+			PreparedStatement pstmt1 = conn1.prepareStatement(sql1);
+			
+			ResultSet rs1 = pstmt1.executeQuery();
+			
+			ArrayList<FoodReviewVo> arr1 = new ArrayList<FoodReviewVo>();
+			boolean found1 = false;
+			while(rs1.next()) {
+				found1 = true;
+				String no = rs1.getString("FOOD_REVIEW_NO");
+				String title = rs1.getString("REVIEW_TITLE");
+				String nick = rs1.getString("NICK");
+				String enrolldate = rs1.getString("ENROLL_DATE");
+				
+				FoodReviewVo frv1 = new FoodReviewVo(no, title, null, null, nick, enrolldate, null);
+				arr1.add(frv1);
+			}
+			
+			if(found1 = false) {
+				System.out.println("리뷰 조회 실패");
+				return;
+			}
+			
+			System.out.printf("%-5s | %-15s | %-5s | %-20s%n", "번호", "리뷰 제목", "작성자", "작성 날짜");
+			
+			
+			for(FoodReviewVo frv1 : arr1) {
+				System.out.printf("%-6s | %-17s | %-5s | %-19s%n", frv1.getFoodReviewNo(), frv1.getReviewTitle(), frv1.getWriterNo(), frv1.getEnrollDate());
+				
+			}
+			}else {
 		Connection conn = JDBCTemplate.getConn();
 		
 		String sql = "SELECT R.FOOD_REVIEW_NO, R.REVIEW_TITLE, M.NICK ,TO_CHAR(R.ENROLL_DATE, 'YYYY-MM-DD HH:MI:SS') AS ENROLL_DATE FROM FOOD_REVIEW R JOIN MEMBER M ON R.WRITER_NO = M.NO WHERE R.QUIT_YN = 'N'"; 
@@ -213,40 +248,6 @@ public class FoodReviewController {
 				 System.out.printf("%-6s | %-17s | %-5s | %-19s%n", frv.getFoodReviewNo(), frv.getReviewTitle(), frv.getWriterNo(), frv.getEnrollDate());
 
 			}
-			if(Main.loginMember != null && Main.loginMember.getAdmin_yn().equals("Y")) {
-				Connection conn1 = JDBCTemplate.getConn();
-				
-				String sql1= "SELECT R.FOOD_REVIEW_NO, R.REVIEW_TITLE, M.NICK ,TO_CHAR(R.ENROLL_DATE, 'YYYY-MM-DD HH:MI:SS') AS ENROLL_DATE FROM FOOD_REVIEW R JOIN MEMBER M ON R.WRITER_NO = M.NO"; 
-				
-				PreparedStatement pstmt1 = conn1.prepareStatement(sql1);
-				
-				ResultSet rs1 = pstmt1.executeQuery();
-				
-				ArrayList<FoodReviewVo> arr1 = new ArrayList<FoodReviewVo>();
-				boolean found1 = false;
-				while(rs1.next()) {
-					found1 = true;
-					String no = rs1.getString("FOOD_REVIEW_NO");
-					String title = rs1.getString("REVIEW_TITLE");
-					String nick = rs1.getString("NICK");
-					String enrolldate = rs1.getString("ENROLL_DATE");
-					
-					FoodReviewVo frv1 = new FoodReviewVo(no, title, null, null, nick, enrolldate, null);
-					arr1.add(frv1);
-				}
-				
-				if(found1 = false) {
-					System.out.println("리뷰 조회 실패");
-					return;
-				}
-				
-				System.out.printf("%-5s | %-15s | %-5s | %-20s%n", "번호", "리뷰 제목", "작성자", "작성 날짜");
-				
-				
-				for(FoodReviewVo frv1 : arr1) {
-					System.out.printf("%-6s | %-17s | %-5s | %-19s%n", frv1.getFoodReviewNo(), frv1.getReviewTitle(), frv1.getWriterNo(), frv1.getEnrollDate());
-					
-				}
 				
 			}  
 		

@@ -81,7 +81,7 @@ public class MemberController {
 				break;
 			}
 
-		} else if (Main.loginMember != null) {
+		} else if (Main.loginMember != null && Main.loginMember.getAdmin_yn().equals("N")) {
 			// 그냥 회원
 			System.out.println("====" + Main.loginMember.getNick() + "====");
 			System.out.println("1. 로그아웃");

@@ -41,6 +41,8 @@ public class BoosterProductController {
 		
 		ResultSet rs = pstmt.executeQuery();
 		
+		BoosterProductVo vo = null;
+		
 		while(rs.next()) {
 		String boosterProdNo = rs.getString("BOOSTER_PROD_NO");
 		String name = rs.getString("NAME");
@@ -48,11 +50,22 @@ public class BoosterProductController {
 		String isDiscountinuedYn = rs.getString("IS_DISCOUNTINUED_YN");
 		String description = rs.getString("DESCRIPTION");
 		
-		System.out.printf("%-5s|%-15s|%-10s|%-5s|%-20s%n", "번호", "제품 이름", "가격", "단종 여부", "제품 설명");
-		BoosterProductVo vo = new BoosterProductVo(boosterProdNo, name, price, isDiscountinuedYn, description);
-		for(BoosterProductVo bpv : arr) {
-			System.out.printf("%-6s|%-15s|%-10s|%-8s|%-20s%n", vo.getBoosterProdNo());
+		vo = new BoosterProductVo();
+		vo.setBoosterProdNo(boosterProdNo);
+		vo.setName(name);
+		vo.setPrice(price);
+		vo.setIsDiscountinuedYn(isDiscountinuedYn);
+		vo.setDescription(description);
+		
+		System.out.println("----------------------------");
+		System.out.printf("제품번호 : " + vo.getBoosterProdNo());
+		System.out.printf(" 제품명 : " + vo.getName());
+		System.out.printf(" 가격 : " + vo.getPrice());		
+		System.out.printf(" 제품설명 : " + vo.getDescription());
+		System.out.println("----------------------------");
 		}
+		
+		
 
 	} catch (Exception e) {
 		// TODO Auto-generated catch block
@@ -65,17 +78,15 @@ public class BoosterProductController {
 	public void selectByName() {
 		try {
 			Connection conn = JDBCTemplate.getConn();
-			String sql = "SELECT * FROM BOOSTER_PRODUCT WHERE NAME = ?";
+			String sql = "SELECT * FROM BOOSTER_PRODUCT WHERE NAME LIKE ?";
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			System.out.print("물품 이름: ");
 			String inputName = Main.SC.nextLine();	
-			pstmt.setString(1,"%" + inputName+ "%");
+			pstmt.setString(1,"%" + inputName + "%");
 			
 			ResultSet rs = pstmt.executeQuery();
 			
-			
-			
-		
+			BoosterProductVo vo = null;
 			
 			while(rs.next()) {
 			String boosterProdNo = rs.getString("BOOSTER_PROD_NO");
@@ -84,10 +95,15 @@ public class BoosterProductController {
 			String isDiscountinuedYn = rs.getString("IS_DISCOUNTINUED_YN");
 			String description = rs.getString("DESCRIPTION");
 			
-			BoosterProductVo vo = new BoosterProductVo(boosterProdNo, name, price, isDiscountinuedYn, description);
+			vo = new BoosterProductVo();
+			vo.setBoosterProdNo(boosterProdNo);
+			vo.setName(name);
+			vo.setPrice(price);
+			vo.setIsDiscountinuedYn(isDiscountinuedYn);
+			vo.setDescription(description);
+			
 			System.out.println(vo.getBoosterProdNo() + " | " + vo.getName() + " | " + vo.getPrice());
 			}
-			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

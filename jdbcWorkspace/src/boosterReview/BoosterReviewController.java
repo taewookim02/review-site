@@ -54,11 +54,11 @@ public class BoosterReviewController {
 		try {
 		Connection conn = JDBCTemplate.getConn();
 
-		System.out.print("리뷰할 제품 번호 : ");
+		System.out.println("리뷰할 제품 번호 : ");
 		String no = Main.SC.nextLine();
-		System.out.print("리뷰 제목 : ");
+		System.out.println("리뷰 제목 : ");
 		String reviewTitle = Main.SC.nextLine();
-		System.out.print("리뷰 내용 : ");
+		System.out.println("리뷰 내용 : ");
 		String review = Main.SC.nextLine();
 
 		String sql = "INSERT INTO BOOSTER_REVIEW (BOOSTER_REVIEW_NO, REVIEW_TITLE, REVIEW, BOOSTER_PROD_NO, MEMBER_NO) VALUES (SEQ_BOOSTER_REVIEW_NO.NEXTVAL, ?, ?, ?, ?)";
@@ -85,7 +85,7 @@ public class BoosterReviewController {
 		try {
 		Connection conn = JDBCTemplate.getConn();
 
-		System.out.print("리뷰 번호 : ");
+		System.out.println("리뷰 번호 : ");
 		String no = Main.SC.nextLine();
 		
 		BoosterProductVo bpvo = new BoosterProductVo();
@@ -122,7 +122,7 @@ public class BoosterReviewController {
 		Connection conn = JDBCTemplate.getConn();
 
 		if(Main.loginMember.getAdmin_yn().equals("Y")) {
-		System.out.print("삭제할 게시글 번호 : ");
+		System.out.println("삭제할 게시글 번호 : ");
 		String no = Main.SC.nextLine();
 
 		String sql = "DELETE FROM BOOSTER_REVIEW WHERE BOOSTER_REVIEW_NO = ?";
@@ -138,7 +138,7 @@ public class BoosterReviewController {
 		System.out.println("게시글 삭제 성공 ! ");
 			
 		} else if (Main.loginMember.getAdmin_yn().equals("N")) {
-		System.out.print("삭제할 게시글 번호 : ");
+		System.out.println("삭제할 게시글 번호 : ");
 		String no = Main.SC.nextLine();
 
 		String sql = "UPDATE BOOSTER_REVIEW SET QUIT_YN = 'Y' WHERE NO = ?";
@@ -154,6 +154,7 @@ public class BoosterReviewController {
 		System.out.println("게시글 삭제 성공 ! ");
 		} else {
 			System.out.println("로그인 하고 오세요");
+			return;
 		}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -167,9 +168,9 @@ public class BoosterReviewController {
 		
 			if (Main.loginMember != null) {
 				
-				System.out.print("수정할 제목 : ");
+				System.out.println("수정할 제목 : ");
 				String reviewTitle = Main.SC.nextLine();
-				System.out.print("제목 수정할 게시글 번호 : ");
+				System.out.println("제목 수정할 게시글 번호 : ");
 				String no = Main.SC.nextLine();
 		
 				String sql = "UPDATE BOOSTER_REVIEW SET REVIEW_TITLE = ? WHERE BOOSTER_REVIEW_NO = ?";
@@ -186,6 +187,7 @@ public class BoosterReviewController {
 				System.out.println("제목 수정 성공 ! ");
 				} else {
 					System.out.println("로그인 하고 오세요");
+					return;
 				}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -201,9 +203,9 @@ public class BoosterReviewController {
 		
 			if (Main.loginMember != null) {
 				
-				System.out.print("수정할 내용 : ");
+				System.out.println("수정할 내용 : ");
 				String review = Main.SC.nextLine();
-				System.out.print("제목 수정할 게시글 번호 : ");
+				System.out.println("제목 수정할 게시글 번호 : ");
 				String no = Main.SC.nextLine();
 		
 				String sql = "UPDATE BOOSTER_REVIEW SET REVIEW = ? WHERE BOOSTER_REVIEW_NO = ?";
@@ -220,6 +222,7 @@ public class BoosterReviewController {
 				System.out.println("내용 수정 성공 ! ");
 				} else {
 					System.out.println("로그인 하고 오세요");
+					return;
 				}
 				} catch (Exception e) {
 					e.printStackTrace();

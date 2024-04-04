@@ -2,6 +2,7 @@ package boosterReview;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 import boosterproduct.BoosterProductVo;
 import main.Main;
@@ -39,33 +40,29 @@ public class BoosterReviewController {
 	
 	public void write() {
 		
-		//validate
 		if(Main.loginMember == null) {
 			System.out.println("로그인 하고 오세요");
 			return;
 		}
 		
 		try {
-		//conn
 		Connection conn = JDBCTemplate.getConn();
 
+		System.out.print("리뷰할 제품 번호 : ");
+		String no = Main.SC.nextLine();
+		System.out.print("리뷰 제목 : ");
+		String reviewTitle = Main.SC.nextLine();
 		System.out.print("리뷰 내용 : ");
 		String review = Main.SC.nextLine();
-		System.out.print("내용 : ");
-		String content = Main.SC.nextLine();
-		
-		BoosterProductVo bpvo= new BoosterProductVo();
-		
-		
-		//SQL
-		String sql = "INSERT INTO BOOSTER_REVIEW (BOOSTER_REVIEW_NO, REVIEW, BOOSTER_PRO_NO, MEMBER_NO) VALUES (SEQ_BOOSTER_REVIEW_NO.NEXTVAL, ?, ?, ?)";
+
+		String sql = "INSERT INTO BOOSTER_REVIEW (BOOSTER_REVIEW_NO, REVIEW_TITLE, REVIEW, BOOSTER_PRO_NO, MEMBER_NO) VALUES (SEQ_BOOSTER_REVIEW_NO.NEXTVAL, ?, ?, ?, ?)";
 		PreparedStatement pstmt = conn.prepareStatement(sql);
-		pstmt.setString(1, review);
-		pstmt.setString(2, bpvo.getBoosterProdNo());
-		pstmt.setString(3, Main.loginMember.getNo());
+		pstmt.setString(1, reviewTitle);
+		pstmt.setString(2, review);
+		pstmt.setString(3, no);
+		pstmt.setString(4, Main.loginMember.getNo());
 		int result = pstmt.executeUpdate();
 		
-		//result
 		if(result != 1) {
 			System.out.println("게시글 작성 실패 ... ");
 			return;
@@ -73,7 +70,6 @@ public class BoosterReviewController {
 		conn.commit();
 		System.out.println("게시글 작성 성공 ! ");
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -81,17 +77,163 @@ public class BoosterReviewController {
 	
 	public void selectWriter() {
 		
+		try {
+		Connection conn = JDBCTemplate.getConn();
+
+		System.out.print("리뷰 번호 : ");
+		String no = Main.SC.nextLine();
+		
+		BoosterProductVo bpvo= new BoosterProductVo();
+		
+		String sql = "SELECT NAME FROM BOOSTER_PRODUCT P JOIN BOOSTER_REVIEW R ON P.BOOSTER_PROD_NO = R.BOOSTER_PROD_NO WHERE BOOSTER_REVIEW_NO = ?";
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, no);
+		
+		ResultSet rs = pstmt.executeQuery();
+		
+		BoosterReviewVo vo = null;
+		
+		if( rs.next() ) {
+		String boosterReviewNo = rs.getString("BOOSTER_REVIEW_NO");
+		String reviewTitle = rs.getString("REVIEW_TITLE");
+		String review = rs.getString("REVIEW");
+		String boosterProdNo = rs.getString("BOOSTER_PROD_NO");
+		String memberNo = rs.getString("MEMBER_NO");
+		
+		vo = new BoosterReviewVo();
+		vo.setBoosterProdNo(boosterReviewNo);
+		vo.setReviewTitle(reviewTitle);
+		vo.setReview(review);
+		vo.setBoosterProdNo(boosterProdNo);
+		vo.setMemberNo(memberNo);
+		
+		System.out.println("리뷰 작성 성공!");
+		
+		} else {
+			System.out.println("리뷰 작성 실패!");
+		}
+		
+		} catch (Exception e) {
+		e.printStackTrace();
 	}
+}
 
 	public void deleteBoard() {
+		
+		try {
+		Connection conn = JDBCTemplate.getConn();
+
+		if(Main.loginMember.getAdmin_yn().equals("Y")) {
+		System.out.print("삭제할 게시글 번호 : ");
+		String no = Main.SC.nextLine();
+
+		String sql = "DELETE FROM BOOSTER_REVIEW WHERE NO = ?";
+		
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, no);
+		int result = pstmt.executeUpdate();
+		
+		if(result != 1) {
+			System.out.println("게시글 삭제  실패 ... ");
+			return;
+		}
+		conn.commit();
+		System.out.println("게시글 삭제 성공 ! ");
+			
+		} else if (Main.loginMember.getAdmin_yn().equals("N")) {
+		System.out.print("삭제할 게시글 번호 : ");
+		String no = Main.SC.nextLine();
+
+		String sql = "UPDATE BOOSTER_REVIEW SET QUIT_YN = 'Y' WHERE NO = ?";
+		
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, no);
+		int result = pstmt.executeUpdate();
+		
+		if(result != 1) {
+			System.out.println("게시글 삭제  실패 ... ");
+			return;
+		}
+		conn.commit();
+		System.out.println("게시글 삭제 성공 ! ");
+		} else {
+			System.out.println("로그인 하고 오세요");
+		}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		
 		
 	}
 	
 	public void updateTitle() {
 		
+		try {
+			Connection conn = JDBCTemplate.getConn();
+		
+			if (Main.loginMember != null) {
+				
+				System.out.print("수정할 제목 : ");
+				String reviewTitle = Main.SC.nextLine();
+				System.out.print("제목 수정할 게시글 번호 : ");
+				String no = Main.SC.nextLine();
+		
+				String sql = "UPDATE BOOSTER_REVIEW SET REVIEW_TITLE = ? WHERE BOOSTER_REVIEW_NO = ?";
+				
+				PreparedStatement pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, reviewTitle);
+				pstmt.setString(2, no);
+				int result = pstmt.executeUpdate();
+				
+				if(result != 1) {
+					System.out.println("게시글 삭제  실패 ... ");
+					return;
+				}
+				conn.commit();
+				System.out.println("게시글 삭제 성공 ! ");
+				} else {
+					System.out.println("로그인 하고 오세요");
+				}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+		
+		
 	}
 	
 	public void updateContent() {
+		
+		try {
+			Connection conn = JDBCTemplate.getConn();
+		
+			if (Main.loginMember != null) {
+				
+				System.out.print("수정할 내용 : ");
+				String review = Main.SC.nextLine();
+				System.out.print("제목 수정할 게시글 번호 : ");
+				String no = Main.SC.nextLine();
+		
+				String sql = "UPDATE BOOSTER_REVIEW SET REVIEW = ? WHERE BOOSTER_REVIEW_NO = ?";
+				
+				PreparedStatement pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, review);
+				pstmt.setString(2, no);
+				int result = pstmt.executeUpdate();
+				
+				if(result != 1) {
+					System.out.println("게시글 삭제  실패 ... ");
+					return;
+				}
+				conn.commit();
+				System.out.println("게시글 삭제 성공 ! ");
+				} else {
+					System.out.println("로그인 하고 오세요");
+				}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+		
 		
 	}
 }

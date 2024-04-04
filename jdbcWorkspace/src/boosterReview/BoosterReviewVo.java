@@ -4,15 +4,17 @@ public class BoosterReviewVo {
 	
 	
 	
+	
 	public BoosterReviewVo() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 	
-	public BoosterReviewVo(String boosterReviewNo, String review, String boosterProdNo, String memberNo,
-			String enrollDate, String quitYn) {
+	public BoosterReviewVo(String boosterReviewNo, String reviewTitle, String review, String boosterProdNo,
+			String memberNo, String enrollDate, String quitYn) {
 		super();
 		this.boosterReviewNo = boosterReviewNo;
+		this.reviewTitle = reviewTitle;
 		this.review = review;
 		this.boosterProdNo = boosterProdNo;
 		this.memberNo = memberNo;
@@ -22,8 +24,9 @@ public class BoosterReviewVo {
 	
 	@Override
 	public String toString() {
-		return "BoosterReviewVo [boosterReviewNo=" + boosterReviewNo + ", review=" + review + ", boosterProdNo="
-				+ boosterProdNo + ", memberNo=" + memberNo + ", enrollDate=" + enrollDate + ", quitYn=" + quitYn + "]";
+		return "BoosterReviewVo [boosterReviewNo=" + boosterReviewNo + ", reviewTitle=" + reviewTitle + ", review="
+				+ review + ", boosterProdNo=" + boosterProdNo + ", memberNo=" + memberNo + ", enrollDate=" + enrollDate
+				+ ", quitYn=" + quitYn + "]";
 	}
 	
 	public String getBoosterReviewNo() {
@@ -31,6 +34,12 @@ public class BoosterReviewVo {
 	}
 	public void setBoosterReviewNo(String boosterReviewNo) {
 		this.boosterReviewNo = boosterReviewNo;
+	}
+	public String getReviewTitle() {
+		return reviewTitle;
+	}
+	public void setReviewTitle(String reviewTitle) {
+		this.reviewTitle = reviewTitle;
 	}
 	public String getReview() {
 		return review;
@@ -63,6 +72,7 @@ public class BoosterReviewVo {
 		this.quitYn = quitYn;
 	}
 	private String boosterReviewNo;
+	private String reviewTitle;
 	private String review;
 	private String boosterProdNo;
 	private String memberNo;

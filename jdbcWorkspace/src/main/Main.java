@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 import AnnouncementBoard.AnnouncementBoard;
 import board.BoardController;
+import boosterproduct.BoosterProductController;
 import foodprod.FoodProd;
 import member.MemberController;
 import member.MemberVo;
@@ -17,13 +18,15 @@ public class Main {
 		BoardController bc = new BoardController();
 		AnnouncementBoard ab = new AnnouncementBoard();
 		FoodProd fp = new FoodProd();
+		BoosterProductController bpc = new BoosterProductController();
 
-		System.out.println("====MENU====");
 		while (true) {
+			System.out.println("====MENU====");
 			System.out.println("1. MEMBER");
 			System.out.println("2. food");
 			System.out.println("3. 자유게시판");
 			System.out.println("4. 공지사항 게시판");
+			System.out.println("5. BOOSTER");
 			System.out.println("9. 종료하기");
 
 			System.out.print("메뉴번호: ");
@@ -42,6 +45,10 @@ public class Main {
 			case "4":
 				ab.printMenu();
 				break;
+			case "5":
+				bpc.printMenu();
+				break;
+
 			case "9":
 				System.out.println("프로그램 종료");
 				return;

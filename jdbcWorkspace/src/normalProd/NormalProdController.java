@@ -31,14 +31,53 @@ public class NormalProdController {
 			addNormal();
 			break;
 		default:
-			System.out.println("잘못입력하셨습니다");
+			System.out.println("잘못된 번호");
 			return;
 		}
 
 	}
 
 	private void lookUpRecent() throws Exception {
+		
+		if(Main.loginMember == null) {
+			System.out.println("로그인이 필요 합니다");
+			return;
+		}
+		
+		Connection conn = JDBCTemplate.getConn();
+		
+		String sql = "SELECT * FROM NORMAL_PRODUCT ORDER BY NOEMAL_PROD_NO DESC";
+		
+		PreparedStatement pstmt =conn.prepareStatement(sql);
+		
+		ResultSet rs = pstmt.executeQuery();
+		ArrayList<NormalProdVo> arr = new ArrayList<NormalProdVo>();
+		boolean found = false;
+		while(rs.next()) {
+			found = true;
+			String no = rs.getString("NORMAL_PROD_NO");
+			String name = rs.getString("NAME");
+			String price = rs.getString("PRICE");
+			String isdicount = rs.getString("IS_DISCOUNTINUED_YN");
+			String description = rs.getString("DESCRIPTION");
+			
+			NormalProdVo npv = new NormalProdVo(no, name, price, isdicount, description);
+			arr.add(npv);
+		}
+		
+		if(found = false) {
+			System.out.println("게시물 조회 실패");
+			return;
+		}
+		
+		 System.out.printf("%-5s | %-15s | %-10s | %-5s | %-20s%n", "번호", "제품 이름", "가격", "단종 여부", "제품 설명");
 
+
+		for(NormalProdVo npv : arr) {
+			 System.out.printf("%-6s | %-15s | %-10s | %-8s | %-20s%n", npv.getNormaProdlNo(), npv.getNormalProdName(), npv.getPrice(), npv.getIsDiscount(), npv.getDescription());
+
+		}
+		
 	}
 
 	public void lookUpName() throws Exception {

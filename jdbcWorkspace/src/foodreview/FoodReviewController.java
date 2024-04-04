@@ -7,7 +7,7 @@ import main.Main;
 import util.JDBCTemplate;
 
 
-public class FoodReview {
+public class FoodReviewController {
 	
 	public void printMenu() throws Exception{
 		

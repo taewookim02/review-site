@@ -2,7 +2,7 @@ package main;
 
 import java.util.Scanner;
 
-import foodprod.FoodProd;
+import foodprod.FoodProdController;
 import member.MemberController;
 import member.MemberVo;
 import normalProd.NormalProdController;
@@ -12,7 +12,7 @@ public class Main {
 	public static MemberVo loginMember = null;
 
 	public static void main(String[] args) throws Exception {
-		FoodProd fp = new FoodProd();
+		FoodProdController fp = new FoodProdController();
 		MemberController mc = new MemberController();
 		NormalProdController nc = new NormalProdController();
 

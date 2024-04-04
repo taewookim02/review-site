@@ -3,3 +3,7 @@
 .classpath
 .project
 jdbcWorkspace/.gitignore
+jdbcWorkspace/src/util/.gitignore
+jdbcWorkspace/src/member/.gitignore
+jdbcWorkspace/src/main/.gitignore
+jdbcWorkspace/src/board/.gitignore

@@ -2,7 +2,11 @@ package AnnouncementBoard;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
+import board.BoardVo;
 import main.Main;
 import util.JDBCTemplate;
 
@@ -141,12 +145,15 @@ public class AnnouncementBoard {
 
 			Connection conn = JDBCTemplate.getConn();
 
-			String sql = "UPDATE ANNOUNCEMENT_BOARD SET DEL_YN = 'Y' WHERE NO = ?";
-			System.out.print("삭제할 게시물 번호 : ");
+			String sql = "UPDATE ANNOUNCEMENT_BOARD SET TITLE = ? WHERE NO = ? AND DEL_YN = 'N'";
+			System.out.print("변경할 게시물 번호 선택 : ");
 			String no = Main.SC.nextLine();
+			System.out.print("변경할 제목 : ");
+			String title = Main.SC.nextLine();
 
 			PreparedStatement pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, no);
+			pstmt.setString(1, title);
+			pstmt.setString(2, no);
 
 			int result = pstmt.executeUpdate();
 
@@ -170,31 +177,36 @@ public class AnnouncementBoard {
 
 			Connection conn = JDBCTemplate.getConn();
 
-			String sql = "UPDATE ANNOUNCEMENT_BOARD SET DEL_YN = 'Y' WHERE NO = ?";
-			System.out.print("삭제할 게시물 번호 : ");
+			String sql = "UPDATE ANNOUNCEMENT_BOARD SET CONTENT = ? WHERE NO = ? AND DEL_YN = 'N'";
+			System.out.print("변경할 게시물 번호 선택 : ");
 			String no = Main.SC.nextLine();
+			System.out.print("변경할 내용 : ");
+			String content = Main.SC.nextLine();
 
 			PreparedStatement pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, no);
+			pstmt.setString(1, content);
+			pstmt.setString(2, no);
 
 			int result = pstmt.executeUpdate();
 
 			if (result != 1) {
 				System.out.println("====================");
-				System.out.println("제목 수정에 실패하였습니다.");
+				System.out.println("내용 수정에 실패하였습니다.");
 				System.out.println("====================");
 				return;
 			}
 			System.out.println("====================");
-			System.out.println("제목 수정이 완료되었습니다.");
+			System.out.println("내용 수정이 완료되었습니다.");
 			System.out.println("====================");
 
 		}
 
 	}
 
-	private void selectAllAnnouncement() {
+	private void selectAllAnnouncement() throws Exception {
 
+		
+		
 	}
 
 	private void selectAnnouncementNo() {

@@ -13,13 +13,15 @@ public class BoardController {
 
 	public void printBoardMenu() throws Exception {
 
-		System.out.println("자유 게시판");
+		System.out.println("==== 자유 게시판 ====");
 		System.out.println("1. 게시물 작성");
-		System.out.println("2. 게시물 삭제 (자신이 작성한 게시물)");
-		System.out.println("3. 게시물 제목 수정 (자신이 작성한 게시물)");
-		System.out.println("4. 게시물 내용 수정 (자신이 작성한 게시물)");
+		System.out.println("2. 게시물 삭제 (작성자 또는 관리자)");
+		System.out.println("3. 게시물 제목 수정 (작성자 또는 관리자)");
+		System.out.println("4. 게시물 내용 수정 (작성자 또는 관리자)");
 		System.out.println("5. 게시물 목록 조회 (최신순)");
 		System.out.println("6. 게시물 작성자명으로 조회");
+		System.out.println("7. 내가 작성한 게시물 조회");
+		System.out.println("8. 이전으로 돌아가기");
 		System.out.print("번호 입력 : ");
 
 		String num = Main.SC.nextLine();
@@ -43,6 +45,13 @@ public class BoardController {
 		case "6":
 			selectByWriterName();
 			break;
+		case "7":
+			selectMyBoard();
+			break;
+		case "8":
+			return;
+		default:
+			System.out.println("잘못 입력하셨습니다.");
 		}
 
 	}
@@ -127,7 +136,7 @@ public class BoardController {
 		int result = pstmt.executeUpdate();
 
 		if (result != 1) {
-			System.out.println("자신의 게시물 또는 삭제되지 않은 게시물만 삭제할 수 있습니다.");
+			System.out.println("삭제되지 않은 게시물만 삭제할 수 있습니다.");
 			return;
 		}
 		System.out.println("게시물이 삭제되었습니다.");
@@ -191,7 +200,7 @@ public class BoardController {
 		int result = pstmt.executeUpdate();
 
 		if (result != 1) {
-			System.out.println("자신의 게시물 또는 삭제되지 않은 게시물만 변경할 수 있습니다.");
+			System.out.println("삭제되지 않은 게시물만 변경할 수 있습니다.");
 			return;
 		}
 		System.out.println("해당 게시물의 제목이 변경되었습니다.");
@@ -256,7 +265,7 @@ public class BoardController {
 		int result = pstmt.executeUpdate();
 
 		if (result != 1) {
-			System.out.println("자신의 게시물 또는 삭제되지 않은 게시물만 변경할 수 있습니다.");
+			System.out.println("삭제되지 않은 게시물만 변경할 수 있습니다.");
 			return;
 		}
 		System.out.println("해당 게시물의 내용이 변경되었습니다.");
@@ -284,7 +293,8 @@ public class BoardController {
 			voList.add(bVo);
 		}
 
-		System.out.printf("%-5s | %-12s | %-18s | %-20s ", "번호", "제목", "작성자", "작성일자");
+		System.out.println("-----------------------------------------------------------------------");
+		System.out.printf("%-4s | %-12s | %-18s | %-20s ", "번호", "제목", "작성자", "작성일자");
 
 		for (BoardVo vo : voList) {
 			System.out.println();
@@ -292,6 +302,7 @@ public class BoardController {
 					vo.getEnrollDate());
 		}
 		System.out.println();
+		System.out.println("-----------------------------------------------------------------------");
 
 	}
 
@@ -299,7 +310,7 @@ public class BoardController {
 
 		Connection conn = JDBCTemplate.getConn();
 
-		String sql = "SELECT B.NO, B.TITLE, B.ENROLL_DATE FROM BOARD B JOIN MEMBER M ON M.NO = B.WRITER_NO WHERE M.NICK = ? AND DEL_YN = 'N'";
+		String sql = "SELECT B.NO, B.TITLE, B.WRITER_NO, B.ENROLL_DATE FROM BOARD B JOIN MEMBER M ON M.NO = B.WRITER_NO WHERE M.NICK = ? AND DEL_YN = 'N'";
 
 		System.out.print("조회할 닉네임 : ");
 		String nick = Main.SC.nextLine();
@@ -314,19 +325,56 @@ public class BoardController {
 		while (rs.next()) {
 			String no = rs.getString("NO");
 			String title = rs.getString("TITLE");
+			String writertNo = rs.getString("WRITER_NO");
+			String enrollDate = rs.getString("ENROLL_DATE");
+
+			bVo = new BoardVo(no, title, null, writertNo, enrollDate, null);
+			voList.add(bVo);
+
+		}
+
+		System.out.println("-----------------------------------------------------------------------");
+		System.out.printf("%-4s | %-8s | %-12s | %-16s ", "게시물 번호", "작성자 번호", "제목", "작성일자");
+		for (BoardVo vo : voList) {
+			System.out.println();
+			System.out.printf("%-8s | %-9s | %-12s | %-20s ", vo.getNo(), vo.getWriterNo(), vo.getTitle(),
+					vo.getEnrollDate());
+		}
+		System.out.println();
+		System.out.println("-----------------------------------------------------------------------");
+
+	}
+
+	private void selectMyBoard() throws Exception {
+
+		Connection conn = JDBCTemplate.getConn();
+
+		String sql = "SELECT NO, TITLE, ENROLL_DATE FROM BOARD WHERE WRITER_NO = ? AND DEL_YN = 'N' ORDER BY ENROLL_DATE DESC";
+
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, Main.loginMember.getNo());
+
+		ResultSet rs = pstmt.executeQuery();
+
+		List<BoardVo> voList = new ArrayList<BoardVo>();
+		BoardVo bVo = null;
+		while (rs.next()) {
+			String no = rs.getString("NO");
+			String title = rs.getString("TITLE");
 			String enrollDate = rs.getString("ENROLL_DATE");
 
 			bVo = new BoardVo(no, title, null, null, enrollDate, null);
 			voList.add(bVo);
 
 		}
-
-		System.out.printf("%-5s | %-12s | %-18s ", "번호", "제목", "작성일자");
+		System.out.println("-----------------------------------------------------------------------");
+		System.out.printf("%-4s | %-12s | %-18s ", "번호", "제목", "작성일자");
 		for (BoardVo vo : voList) {
 			System.out.println();
 			System.out.printf("%-5s | %-12s | %-20s ", vo.getNo(), vo.getTitle(), vo.getEnrollDate());
 		}
 		System.out.println();
+		System.out.println("-----------------------------------------------------------------------");
 
 	}
 

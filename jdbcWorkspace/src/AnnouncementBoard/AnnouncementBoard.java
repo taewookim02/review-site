@@ -14,6 +14,7 @@ public class AnnouncementBoard {
 
 	public void printMenu() throws Exception {
 
+		System.out.println("==== 공지사항 게시판 ====");
 		System.out.println("1. 공지사항 등록 (관리자)");
 		System.out.println("2. 공지사항 삭제 (관리자)");
 		System.out.println("3. 공지사항 제목 수정 (관리자)");
@@ -23,7 +24,7 @@ public class AnnouncementBoard {
 		System.out.println("7. 공지사항 상세조회 (생성일자)");
 		System.out.println("8. 이전으로 돌아가기");
 
-		System.out.print("메뉴번호: ");
+		System.out.print("번호 입력 : ");
 		String menu = Main.SC.nextLine();
 
 		switch (menu) {
@@ -222,14 +223,14 @@ public class AnnouncementBoard {
 			Vo = new AnnouncementBoardVo(no, title, null, null, enrollDate, null);
 			voList.add(Vo);
 		}
-
+		System.out.println("-----------------------------------------------------------------------");
 		System.out.printf("%-5s | %-12s | %-20s%n ", "번호", "제목", "작성일자");
 
 		for (AnnouncementBoardVo vo : voList) {
 			System.out.printf("%-5s | %-12s | %-20s%n", vo.getNo(), vo.getTitle(), vo.getEnrollDate());
 		}
-		System.out.println("");
-
+		System.out.println();
+		System.out.println("-----------------------------------------------------------------------");
 	}
 
 	private void selectAnnouncementNo() throws Exception {
@@ -256,14 +257,15 @@ public class AnnouncementBoard {
 			Vo = new AnnouncementBoardVo(no2, title, content, null, enrollDate, null);
 			voList.add(Vo);
 		}
-
+		System.out.println("-----------------------------------------------------------------------");
 		System.out.printf("%-5s | %-12s | %-20s | %-20s%n ", "번호", "제목", "내용", "작성일자");
 
 		for (AnnouncementBoardVo vo : voList) {
 			System.out.printf("%-5s | %-12s | %-20s | %-20s%n ", vo.getNo(), vo.getTitle(), vo.getContent(),
 					vo.getEnrollDate());
 		}
-		System.out.println("");
+		System.out.println();
+		System.out.println("-----------------------------------------------------------------------");
 
 	}
 
@@ -291,14 +293,15 @@ public class AnnouncementBoard {
 			Vo = new AnnouncementBoardVo(no2, title, content, null, enrollDate, null);
 			voList.add(Vo);
 		}
-
+		System.out.println("-----------------------------------------------------------------------");
 		System.out.printf("%-5s | %-12s | %-20s | %-20s%n ", "번호", "제목", "내용", "작성일자");
 
 		for (AnnouncementBoardVo vo : voList) {
 			System.out.printf("%-5s | %-12s | %-20s | %-20s%n ", vo.getNo(), vo.getTitle(), vo.getContent(),
 					vo.getEnrollDate());
 		}
-		System.out.println("");
+		System.out.println();
+		System.out.println("-----------------------------------------------------------------------");
 
 	}
 

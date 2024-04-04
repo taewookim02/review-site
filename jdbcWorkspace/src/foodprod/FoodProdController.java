@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import main.Main;
 import util.JDBCTemplate;
 
-public class FoodProd {
+public class FoodProdController {
 	
 public void printMenu() throws Exception{
 		

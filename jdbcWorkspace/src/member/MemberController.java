@@ -9,117 +9,127 @@ import main.Main;
 import util.JDBCTemplate;
 
 public class MemberController {
-
 	public void printMenu() {
-
 		if (Main.loginMember == null) {
-			System.out.println("====MEMBER====");
-			System.out.println("1. 로그인");
-			System.out.println("2. 회원가입");
-			System.out.println("9. 이전 메뉴로 돌아가기");
-
-			System.out.print("메뉴 번호: ");
-			String menu = Main.SC.nextLine();
-
-			switch (menu) {
-			case "1":
-				login();
-				break;
-			case "2":
-				join();
-				break;
-			case "9":
-				System.out.println("=============");
-				System.out.println("이전 메뉴로..");
-				System.out.println("=============");
-				return;
-			default:
-				System.out.println("잘못 입력하셨습니다.");
-				break;
-			}
+			printGuestMenu();
 		} else if (Main.loginMember.getAdmin_yn().equals("Y")) {
 			// 관리자멤버 일 때
-			System.out.println("====관리자메뉴====");
-			System.out.println("1. 로그아웃");
-			System.out.println("2. 비밀번호 변경");
-			System.out.println("3. 닉네임 변경");
-			System.out.println("4. 회원 전체 목록");
-			System.out.println("5. 회원 상세 조회");
-			System.out.println("9. 이전 메뉴로 돌아가기");
-
-			System.out.print("메뉴 번호: ");
-			String menu = Main.SC.nextLine();
-			switch (menu) {
-			case "1":
-				// 로그아웃
-				logout();
-				break;
-			case "2":
-				// 정보 수정 (비번 변경)
-				changePwd();
-				break;
-			case "3":
-				// 정보 수정 (닉네임 변경)
-				changeNick();
-				break;
-			case "4":
-				// 회원 전체 목록 조회 (관리자 전용)
-				selectAllMembers();
-				break;
-			case "5":
-				// 회원 상세 조회 (관리자 전용)
-				selectOneMember();
-				break;
-			case "9":
-				System.out.println("=============");
-				System.out.println("이전 메뉴로..");
-				System.out.println("=============");
-				return;
-
-			default:
-				System.out.println("잘못 입력하셨습니다.");
-				break;
-			}
+			printAdminMenu();
 
 		} else if (Main.loginMember != null && Main.loginMember.getAdmin_yn().equals("N")) {
 			// 그냥 회원
-			System.out.println("====" + Main.loginMember.getNick() + "====");
-			System.out.println("1. 로그아웃");
-			System.out.println("2. 비밀번호 변경");
-			System.out.println("3. 닉네임 변경");
-			System.out.println("4. 회원탈퇴");
-			System.out.println("9. 이전 메뉴로 돌아가기");
+			printMemberMenu();
+		}
+	}
 
-			System.out.print("메뉴 번호: ");
-			String menu = Main.SC.nextLine();
+	private void printMemberMenu() {
+		System.out.println("====" + Main.loginMember.getNick() + "====");
+		System.out.println("1. 로그아웃");
+		System.out.println("2. 비밀번호 변경");
+		System.out.println("3. 닉네임 변경");
+		System.out.println("4. 회원탈퇴");
+		System.out.println("9. 이전 메뉴로 돌아가기");
 
-			switch (menu) {
-			case "1":
-				// 로그아웃
-				logout();
-				break;
-			case "2":
-				// 정보 수정 (비번 변경)
-				changePwd();
-				break;
-			case "3":
-				// 정보 수정 (닉네임 변경)
-				changeNick();
-				break;
-			case "4":
-				// 회원탈퇴
-				deleteMember();
-				break;
-			case "9":
-				System.out.println("=============");
-				System.out.println("이전 메뉴로..");
-				System.out.println("=============");
-				return;
+		System.out.print("메뉴 번호: ");
+		String menu = Main.SC.nextLine();
 
-			default:
-				System.out.println("잘못 입력하셨습니다.");
-				break;
-			}
+		switch (menu) {
+		case "1":
+			// 로그아웃
+			logout();
+			break;
+		case "2":
+			// 정보 수정 (비번 변경)
+			changePwd();
+			break;
+		case "3":
+			// 정보 수정 (닉네임 변경)
+			changeNick();
+			break;
+		case "4":
+			// 회원탈퇴
+			deleteMember();
+			break;
+		case "9":
+			System.out.println("=============");
+			System.out.println("이전 메뉴로..");
+			System.out.println("=============");
+			return;
+
+		default:
+			System.out.println("잘못 입력하셨습니다.");
+			break;
+		}
+	}
+
+	private void printAdminMenu() {
+		System.out.println("====관리자메뉴====");
+		System.out.println("1. 로그아웃");
+		System.out.println("2. 비밀번호 변경");
+		System.out.println("3. 닉네임 변경");
+		System.out.println("4. 회원 전체 목록");
+		System.out.println("5. 회원 상세 조회");
+		System.out.println("9. 이전 메뉴로 돌아가기");
+
+		System.out.print("메뉴 번호: ");
+		String menu = Main.SC.nextLine();
+		switch (menu) {
+		case "1":
+			// 로그아웃
+			logout();
+			break;
+		case "2":
+			// 정보 수정 (비번 변경)
+			changePwd();
+			break;
+		case "3":
+			// 정보 수정 (닉네임 변경)
+			changeNick();
+			break;
+		case "4":
+			// 회원 전체 목록 조회 (관리자 전용)
+			selectAllMembers();
+			break;
+		case "5":
+			// 회원 상세 조회 (관리자 전용)
+			selectOneMember();
+			break;
+		case "9":
+			System.out.println("=============");
+			System.out.println("이전 메뉴로..");
+			System.out.println("=============");
+			return;
+
+		default:
+			System.out.println("잘못 입력하셨습니다.");
+			break;
+		}
+	}
+
+	private void printGuestMenu() {
+		System.out.println("====MEMBER====");
+		System.out.println("1. 로그인");
+		System.out.println("2. 회원가입");
+		System.out.println("9. 이전 메뉴로 돌아가기");
+
+		System.out.print("메뉴 번호: ");
+		String menu = Main.SC.nextLine();
+
+		switch (menu) {
+		case "1":
+			login();
+			break;
+		case "2":
+			join();
+			break;
+		case "9":
+			System.out.println("=============");
+			System.out.println("이전 메뉴로..");
+			System.out.println("=============");
+			return;
+		default:
+			System.out.println("잘못 입력하셨습니다.");
+			break;
 		}
 	}
 

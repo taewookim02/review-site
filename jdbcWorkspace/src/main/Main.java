@@ -2,6 +2,7 @@ package main;
 
 import java.util.Scanner;
 
+import boosterproduct.BoosterProductController;
 import foodprod.FoodProd;
 import member.MemberController;
 import member.MemberVo;
@@ -12,11 +13,14 @@ public class Main {
 
 	public static void main(String[] args) throws Exception {
 		MemberController mc = new MemberController();
+		BoosterProductController bpc = new BoosterProductController();
 		FoodProd fp = new FoodProd();
-		System.out.println("====MENU====");
+
 		while (true) {
+			System.out.println("====MENU====");
 			System.out.println("1. MEMBER");
 			System.out.println("2. food");
+			System.out.println("4. BOOSTER");
 			System.out.println("9. 종료하기");
 
 			System.out.print("메뉴번호: ");
@@ -29,6 +33,10 @@ public class Main {
 			case "2":
 				fp.printMenu();
 				break;
+			case "4":
+				bpc.printMenu();
+				break;
+
 			case "9":
 				System.out.println("프로그램 종료");
 				return;

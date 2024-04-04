@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 
 import boosterproduct.BoosterProductVo;
 import main.Main;
+import member.MemberVo;
 import util.JDBCTemplate;
 
 public class BoosterReviewController {
@@ -14,9 +15,11 @@ public class BoosterReviewController {
 		System.out.println("====BOOSTER REVIEW====");
 		System.out.println("1. 구매후기 작성");
 		System.out.println("2. 게시물 작성자명 조회");
-		System.out.print("3. 게시물 삭제");
-		System.out.print("4. 게시물 제목수정");
-		System.out.print("5. 게시물 내용수정");
+		System.out.println("3. 게시물 삭제");
+		System.out.println("4. 게시물 제목수정");
+		System.out.println("5. 게시물 내용수정");
+		System.out.println("6. 리뷰 내용확인");
+		
 		String menu = Main.SC.nextLine();
 
 		switch (menu) {
@@ -28,10 +31,13 @@ public class BoosterReviewController {
 			break;
 		case "3":
 			deleteBoard();
+			break;
 		case "4":
 			updateTitle();
+			break;
 		case "5":
 			updateContent();
+			break;
 		default:
 			break;
 		}
@@ -55,7 +61,7 @@ public class BoosterReviewController {
 		System.out.print("리뷰 내용 : ");
 		String review = Main.SC.nextLine();
 
-		String sql = "INSERT INTO BOOSTER_REVIEW (BOOSTER_REVIEW_NO, REVIEW_TITLE, REVIEW, BOOSTER_PRO_NO, MEMBER_NO) VALUES (SEQ_BOOSTER_REVIEW_NO.NEXTVAL, ?, ?, ?, ?)";
+		String sql = "INSERT INTO BOOSTER_REVIEW (BOOSTER_REVIEW_NO, REVIEW_TITLE, REVIEW, BOOSTER_PROD_NO, MEMBER_NO) VALUES (SEQ_BOOSTER_REVIEW_NO.NEXTVAL, ?, ?, ?, ?)";
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		pstmt.setString(1, reviewTitle);
 		pstmt.setString(2, review);
@@ -67,7 +73,6 @@ public class BoosterReviewController {
 			System.out.println("게시글 작성 실패 ... ");
 			return;
 		}
-		conn.commit();
 		System.out.println("게시글 작성 성공 ! ");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -83,31 +88,24 @@ public class BoosterReviewController {
 		System.out.print("리뷰 번호 : ");
 		String no = Main.SC.nextLine();
 		
-		BoosterProductVo bpvo= new BoosterProductVo();
+		BoosterProductVo bpvo = new BoosterProductVo();
 		
-		String sql = "SELECT NAME FROM BOOSTER_PRODUCT P JOIN BOOSTER_REVIEW R ON P.BOOSTER_PROD_NO = R.BOOSTER_PROD_NO WHERE BOOSTER_REVIEW_NO = ?";
+		String sql = "SELECT NICK FROM MEMBER M JOIN BOOSTER_REVIEW R ON M.NO = R.MEMBER_NO WHERE BOOSTER_REVIEW_NO = ?";
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		pstmt.setString(1, no);
 		
 		ResultSet rs = pstmt.executeQuery();
 		
-		BoosterReviewVo vo = null;
+		MemberVo vo = null;
 		
 		if( rs.next() ) {
-		String boosterReviewNo = rs.getString("BOOSTER_REVIEW_NO");
-		String reviewTitle = rs.getString("REVIEW_TITLE");
-		String review = rs.getString("REVIEW");
-		String boosterProdNo = rs.getString("BOOSTER_PROD_NO");
-		String memberNo = rs.getString("MEMBER_NO");
+		String nick = rs.getString("NICK");
 		
-		vo = new BoosterReviewVo();
-		vo.setBoosterProdNo(boosterReviewNo);
-		vo.setReviewTitle(reviewTitle);
-		vo.setReview(review);
-		vo.setBoosterProdNo(boosterProdNo);
-		vo.setMemberNo(memberNo);
+		vo = new MemberVo();
+		vo.setNick(nick);
+
 		
-		System.out.println("리뷰 작성 성공!");
+		System.out.println(vo.getNick());
 		
 		} else {
 			System.out.println("리뷰 작성 실패!");
@@ -127,7 +125,7 @@ public class BoosterReviewController {
 		System.out.print("삭제할 게시글 번호 : ");
 		String no = Main.SC.nextLine();
 
-		String sql = "DELETE FROM BOOSTER_REVIEW WHERE NO = ?";
+		String sql = "DELETE FROM BOOSTER_REVIEW WHERE BOOSTER_REVIEW_NO = ?";
 		
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		pstmt.setString(1, no);
@@ -137,7 +135,6 @@ public class BoosterReviewController {
 			System.out.println("게시글 삭제  실패 ... ");
 			return;
 		}
-		conn.commit();
 		System.out.println("게시글 삭제 성공 ! ");
 			
 		} else if (Main.loginMember.getAdmin_yn().equals("N")) {
@@ -154,7 +151,6 @@ public class BoosterReviewController {
 			System.out.println("게시글 삭제  실패 ... ");
 			return;
 		}
-		conn.commit();
 		System.out.println("게시글 삭제 성공 ! ");
 		} else {
 			System.out.println("로그인 하고 오세요");
@@ -162,9 +158,6 @@ public class BoosterReviewController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		
-		
 	}
 	
 	public void updateTitle() {
@@ -187,11 +180,10 @@ public class BoosterReviewController {
 				int result = pstmt.executeUpdate();
 				
 				if(result != 1) {
-					System.out.println("게시글 삭제  실패 ... ");
+					System.out.println("제목 수정 실패 ... ");
 					return;
 				}
-				conn.commit();
-				System.out.println("게시글 삭제 성공 ! ");
+				System.out.println("제목 수정 성공 ! ");
 				} else {
 					System.out.println("로그인 하고 오세요");
 				}
@@ -222,11 +214,10 @@ public class BoosterReviewController {
 				int result = pstmt.executeUpdate();
 				
 				if(result != 1) {
-					System.out.println("게시글 삭제  실패 ... ");
+					System.out.println("내용 수정 실패 ... ");
 					return;
 				}
-				conn.commit();
-				System.out.println("게시글 삭제 성공 ! ");
+				System.out.println("내용 수정 성공 ! ");
 				} else {
 					System.out.println("로그인 하고 오세요");
 				}

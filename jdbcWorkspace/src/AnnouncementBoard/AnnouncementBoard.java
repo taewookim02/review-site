@@ -19,8 +19,8 @@ public class AnnouncementBoard {
 		System.out.println("3. 공지사항 제목 수정 (관리자)");
 		System.out.println("4. 공지사항 내용 수정 (관리자)");
 		System.out.println("5. 공지사항 전체 조회");
-		System.out.println("6. 공지사항 번호로 상세 조회");
-		System.out.println("7. 공지사항 생성일자로 조회");
+		System.out.println("6. 공지사항 상세조회 (번호)");
+		System.out.println("7. 공지사항 상세조회 (생성일자)");
 		System.out.println("8. 이전으로 돌아가기");
 
 		System.out.print("메뉴번호: ");
@@ -205,15 +205,97 @@ public class AnnouncementBoard {
 
 	private void selectAllAnnouncement() throws Exception {
 
-		
-		
+		Connection conn = JDBCTemplate.getConn();
+
+		String sql = "SELECT NO, TITLE, ENROLL_DATE FROM ANNOUNCEMENT_BOARD";
+
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		ResultSet rs = pstmt.executeQuery();
+
+		List<AnnouncementBoardVo> voList = new ArrayList<AnnouncementBoardVo>();
+		AnnouncementBoardVo Vo = null;
+		while (rs.next()) {
+			String no = rs.getString("NO");
+			String title = rs.getString("TITLE");
+			String enrollDate = rs.getString("ENROLL_DATE");
+
+			Vo = new AnnouncementBoardVo(no, title, null, null, enrollDate, null);
+			voList.add(Vo);
+		}
+
+		System.out.printf("%-5s | %-12s | %-20s%n ", "번호", "제목", "작성일자");
+
+		for (AnnouncementBoardVo vo : voList) {
+			System.out.printf("%-5s | %-12s | %-20s%n", vo.getNo(), vo.getTitle(), vo.getEnrollDate());
+		}
+
 	}
 
-	private void selectAnnouncementNo() {
+	private void selectAnnouncementNo() throws Exception {
+
+		Connection conn = JDBCTemplate.getConn();
+
+		String sql = "SELECT NO, TITLE, CONTENT, ENROLL_DATE FROM ANNOUNCEMENT_BOARD WHERE NO = ?";
+
+		System.out.print("공지사항 번호 선택 : ");
+		String no = Main.SC.nextLine();
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, no);
+
+		ResultSet rs = pstmt.executeQuery();
+
+		List<AnnouncementBoardVo> voList = new ArrayList<AnnouncementBoardVo>();
+		AnnouncementBoardVo Vo = null;
+		while (rs.next()) {
+			String no2 = rs.getString("NO");
+			String title = rs.getString("TITLE");
+			String content = rs.getString("CONTENT");
+			String enrollDate = rs.getString("ENROLL_DATE");
+
+			Vo = new AnnouncementBoardVo(no2, title, content, null, enrollDate, null);
+			voList.add(Vo);
+		}
+
+		System.out.printf("%-5s | %-12s | %-20s | %-20s%n ", "번호", "제목", "내용", "작성일자");
+
+		for (AnnouncementBoardVo vo : voList) {
+			System.out.printf("%-5s | %-12s | %-20s | %-20s%n ", vo.getNo(), vo.getTitle(), vo.getContent(),
+					vo.getEnrollDate());
+		}
 
 	}
 
-	private void selectAnnouncementEnrollDate() {
+	private void selectAnnouncementEnrollDate() throws Exception {
+
+		Connection conn = JDBCTemplate.getConn();
+
+		String sql = "SELECT NO, TITLE, CONTENT, ENROLL_DATE FROM ANNOUNCEMENT_BOARD WHERE TO_CHAR(ENROLL_DATE, 'YYYY\"년\" MM\"월\" DD\"일\"') LIKE '%' || ? || '%'";
+
+		System.out.print("조회할 날짜 (0000년 00월 00일) : ");
+		String no = Main.SC.nextLine();
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, no);
+
+		ResultSet rs = pstmt.executeQuery();
+
+		List<AnnouncementBoardVo> voList = new ArrayList<AnnouncementBoardVo>();
+		AnnouncementBoardVo Vo = null;
+		while (rs.next()) {
+			String no2 = rs.getString("NO");
+			String title = rs.getString("TITLE");
+			String content = rs.getString("CONTENT");
+			String enrollDate = rs.getString("ENROLL_DATE");
+
+			Vo = new AnnouncementBoardVo(no2, title, content, null, enrollDate, null);
+			voList.add(Vo);
+		}
+
+		System.out.printf("%-5s | %-12s | %-20s | %-20s%n ", "번호", "제목", "내용", "작성일자");
+
+		for (AnnouncementBoardVo vo : voList) {
+			System.out.printf("%-5s | %-12s | %-20s | %-20s%n ", vo.getNo(), vo.getTitle(), vo.getContent(),
+					vo.getEnrollDate());
+		}
 
 	}
 

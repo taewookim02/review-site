@@ -85,7 +85,7 @@ public class BoardController {
 			return;
 		}
 
-		if(Main.loginMember.getNo().equals("1")) {
+		if (Main.loginMember.getNo().equals("1")) {
 			adminDelete();
 		} else {
 			userDelete();
@@ -112,7 +112,7 @@ public class BoardController {
 		}
 		System.out.println("게시물이 삭제되었습니다.");
 	}
-	
+
 	private void adminDelete() throws Exception {
 		Connection conn = JDBCTemplate.getConn();
 
@@ -121,7 +121,8 @@ public class BoardController {
 		String no = Main.SC.nextLine();
 
 		PreparedStatement pstmt = conn.prepareStatement(sql);
-		pstmt.setString(1, no);;
+		pstmt.setString(1, no);
+		;
 
 		int result = pstmt.executeUpdate();
 
@@ -131,7 +132,7 @@ public class BoardController {
 		}
 		System.out.println("게시물이 삭제되었습니다.");
 	}
-	
+
 	private void editTitle() throws Exception {
 		if (Main.loginMember == null) {
 			System.out.println("로그인 후 이용 가능합니다.");
@@ -147,7 +148,7 @@ public class BoardController {
 	}
 
 	private void userEditTitle() throws Exception {
-		
+
 		Connection conn = JDBCTemplate.getConn();
 
 		String sql = "UPDATE BOARD SET TITLE = ? WHERE NO = ? AND DEL_YN = 'N' AND WRITER_NO = ?";
@@ -169,11 +170,11 @@ public class BoardController {
 			return;
 		}
 		System.out.println("해당 게시물의 제목이 변경되었습니다.");
-		
+
 	}
 
 	private void adminEditTitle() throws Exception {
-		
+
 		Connection conn = JDBCTemplate.getConn();
 
 		String sql = "UPDATE BOARD SET TITLE = ? WHERE NO = ? AND DEL_YN = 'N'";
@@ -194,9 +195,9 @@ public class BoardController {
 			return;
 		}
 		System.out.println("해당 게시물의 제목이 변경되었습니다.");
-		
+
 	}
-	
+
 	private void editContent() throws Exception {
 		if (Main.loginMember == null) {
 			System.out.println("로그인 후 이용 가능합니다.");
@@ -210,9 +211,9 @@ public class BoardController {
 		}
 
 	}
-	
+
 	private void userEditContent() throws Exception {
-		
+
 		Connection conn = JDBCTemplate.getConn();
 
 		String sql = "UPDATE BOARD SET CONTENT = ? WHERE NO = ? AND DEL_YN = 'N' AND WRITER_NO = ?";
@@ -234,11 +235,11 @@ public class BoardController {
 			return;
 		}
 		System.out.println("해당 게시물의 내용이 변경되었습니다.");
-		
+
 	}
 
 	private void adminEditContent() throws Exception {
-		
+
 		Connection conn = JDBCTemplate.getConn();
 
 		String sql = "UPDATE BOARD SET CONTENT = ? WHERE NO = ? AND DEL_YN = 'N'";
@@ -259,9 +260,9 @@ public class BoardController {
 			return;
 		}
 		System.out.println("해당 게시물의 내용이 변경되었습니다.");
-		
+
 	}
-	
+
 	private void selectBoardList() throws Exception {
 
 		Connection conn = JDBCTemplate.getConn();
@@ -290,6 +291,7 @@ public class BoardController {
 			System.out.printf("%-5s | %-12s | %-18s | %-20s", vo.getNo(), vo.getTitle(), vo.getWriterNo(),
 					vo.getEnrollDate());
 		}
+		System.out.println();
 
 	}
 
@@ -324,6 +326,7 @@ public class BoardController {
 			System.out.println();
 			System.out.printf("%-5s | %-12s | %-20s ", vo.getNo(), vo.getTitle(), vo.getEnrollDate());
 		}
+		System.out.println();
 
 	}
 

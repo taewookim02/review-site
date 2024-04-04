@@ -1,5 +1,5 @@
 --------------------------------
----------- ÏãúÌÄÄÏä§ ÏÇ≠Ï†ú-----------
+---------- ?ãú???ä§ ?Ç≠?†ú-----------
 --------------------------------
 DROP SEQUENCE SEQ_MEMBER_NO;
 DROP SEQUENCE SEQ_BOOSTER_PROD_NO;
@@ -14,7 +14,7 @@ DROP SEQUENCE SEQ_BOARD_NO;
 
 
 --------------------------------
----------- ÏãúÌÄÄÏä§ ÏÉùÏÑ± -----------
+---------- ?ãú???ä§ ?Éù?Ñ± -----------
 --------------------------------
 CREATE SEQUENCE SEQ_MEMBER_NO NOCACHE NOCYCLE;
 CREATE SEQUENCE SEQ_BOOSTER_PROD_NO NOCACHE NOCYCLE;
@@ -28,7 +28,7 @@ CREATE SEQUENCE SEQ_BOARD_NO NOCACHE NOCYCLE;
 
 
 --------------------------------
----------- ÌÖåÏù¥Î∏î ÏÇ≠Ï†ú -----------
+---------- ?Öå?ù¥Î∏? ?Ç≠?†ú -----------
 --------------------------------
 DROP TABLE MEMBER CASCADE CONSTRAINTS;
 DROP TABLE BOOSTER_PRODUCT cascade constraints;
@@ -43,13 +43,13 @@ DROP TABLE BOARD CASCADE CONSTRAINTS;
 
 
 --------------------------------
----------- ÌÖåÏù¥Î∏î ÏÉùÏÑ± -----------
+---------- ?Öå?ù¥Î∏? ?Éù?Ñ± -----------
 --------------------------------
 CREATE TABLE MEMBER(
     NO                      NUMBER          CONSTRAINT PK_MEMBER_NO PRIMARY KEY
     , ID                    VARCHAR2(100)   CONSTRAINT NN_MEMBER_ID NOT NULL CONSTRAINT UQ_MEMBER_ID UNIQUE
     , PWD                   VARCHAR2(100)   CONSTRAINT NN_MEMBER_PWD NOT NULL
-    , NICK                  VARCHAR2(100)   CONSTRAINT NN_MEMBER_NICK NOT NULL --Ïö∞Î¶¨ ÏÇ¨Ïù¥Ìä∏Îäî ÎãâÎÑ§ÏûÑ Ï§ëÎ≥µÏùÄ ÌóàÏö©Ìï†Í±∞ÏûÑ
+    , NICK                  VARCHAR2(100)   CONSTRAINT NN_MEMBER_NICK NOT NULL --?ö∞Î¶? ?Ç¨?ù¥?ä∏?äî ?ãâ?Ñ§?ûÑ Ï§ëÎ≥µ?? ?óà?ö©?ï†Í±∞ÏûÑ
     , JOIN_DATE             TIMESTAMP       DEFAULT SYSDATE
     , MODIFY_DATE           TIMESTAMP       
     , QUIT_YN               CHAR(1)         DEFAULT 'N' CONSTRAINT CK_MEMBER_QUIT CHECK( QUIT_YN IN ('Y','N')  )
@@ -60,7 +60,7 @@ CREATE TABLE BOOSTER_PRODUCT (
    BOOSTER_PROD_NO           NUMBER         PRIMARY KEY,
    NAME                      VARCHAR2(100)  NOT NULL,
    PRICE                     VARCHAR2(50),
-   IS_DISCOUNTINUED_YN       CHAR(1)        DEFAULT 'Y' CONSTRAINT CK_DIS_YN_1 CHECK (IS_DISCOUNTINUED_YN IN ('Y','N')),
+   IS_DISCOUNTINUED_YN       CHAR(1)        DEFAULT 'N' CONSTRAINT CK_DIS_YN_1 CHECK (IS_DISCOUNTINUED_YN IN ('Y','N')),
    DESCRIPTION               VARCHAR2(1000)      
 );
 
@@ -78,7 +78,7 @@ CREATE TABLE NORMAL_PRODUCT (
    NORMAL_PROD_NO           NUMBER          PRIMARY KEY,
    NAME                     VARCHAR2(100)   NOT NULL,
    PRICE                    VARCHAR2(50),
-   IS_DISCOUNTINUED_YN      CHAR(1)         DEFAULT 'Y' CONSTRAINT CK_DIS_YN_2 CHECK (IS_DISCOUNTINUED_YN IN ('Y','N')),
+   IS_DISCOUNTINUED_YN      CHAR(1)         DEFAULT 'N' CONSTRAINT CK_DIS_YN_2 CHECK (IS_DISCOUNTINUED_YN IN ('Y','N')),
    DESCRIPTION              VARCHAR2(1000)       
 );
 
@@ -89,25 +89,25 @@ CREATE TABLE NORMAL_REVIEW (
    NORMAL_PROD_NO           NUMBER,
    WRITER_NO                NUMBER,
    ENROLL_DATE              TIMESTAMP       DEFAULT SYSDATE,
-   QUIT_YN                  CHAR(1)         DEFAULT 'Y'CONSTRAINT CK_QUIT_YN_2 CHECK( QUIT_YN IN ('Y','N') )
+   QUIT_YN                  CHAR(1)         DEFAULT 'N'CONSTRAINT CK_QUIT_YN_2 CHECK( QUIT_YN IN ('Y','N') )
 );
 
 CREATE TABLE FOOD_PRODUCT (
 	FOOD_PROD_NO	        NUMBER          PRIMARY KEY ,
 	NAME	                VARCHAR2(1000)  NOT NULL,
 	PRICE	                VARCHAR2(50)		    ,
-	IS_DISCOUNTINUED_YN	    CHAR(1)		    DEFAULT 'Y' CONSTRAINT CK_DIS_YN_3 CHECK (IS_DISCOUNTINUED_YN IN ('Y','N')),
+	IS_DISCOUNTINUED_YN	    CHAR(1)		    DEFAULT 'N' CONSTRAINT CK_DIS_YN_3 CHECK (IS_DISCOUNTINUED_YN IN ('Y','N')),
 	DESCRIPTION	            VARCHAR2(1000)	    
 );
 
 CREATE TABLE FOOD_REVIEW (
 	FOOD_REVIEW_NO	        NUMBER          PRIMARY KEY,
-  REVIEW_TITLE            VARCHAR2(100),
+    REVIEW_TITLE            VARCHAR2(100),
 	REVIEW	                VARCHAR2(1000)	NULL,
 	FOOD_PROD_NO	        NUMBER,
 	WRITER_NO	            NUMBER	,
 	ENROLL_DATE	            timestamp       DEFAULT SYSDATE,
-	QUIT_YN	                char(1)	        DEFAULT 'Y'CONSTRAINT CK_QUIT_YN_3 CHECK( QUIT_YN IN ('Y','N') )
+	QUIT_YN	                char(1)	        DEFAULT 'N'CONSTRAINT CK_QUIT_YN_3 CHECK( QUIT_YN IN ('Y','N') )
 );
 
 CREATE TABLE ANNOUNCEMENT_BOARD (
@@ -132,7 +132,7 @@ CREATE TABLE BOARD (
 
 
 --------------------------------
----------- Ïô∏ÎûòÌÇ§ Ï∂îÍ∞Ä -----------
+---------- ?ô∏?ûò?Ç§ Ï∂îÍ? -----------
 --------------------------------
 
 ALTER TABLE BOOSTER_REVIEW
@@ -162,13 +162,10 @@ ADD CONSTRAINT FK_MEMBER_TO_ANNOUNCEMENT_BOARD_NO FOREIGN KEY (WRITER_NO)REFEREN
 
 
 --------------------------------
----------- Îç∞Ïù¥ÌÑ∞ ÏÇΩÏûÖ -----------
+---------- ?ç∞?ù¥?Ñ∞ ?ÇΩ?ûÖ -----------
 --------------------------------
-INSERT INTO MEMBER(NO, ID, PWD, NICK, ADMIN_YN) VALUES(SEQ_MEMBER_NO.NEXTVAL, 'admin', '1234', 'Í¥ÄÎ¶¨Ïûê', 'Y'); -- Í¥ÄÎ¶¨ÏûêÍ≥ÑÏ†ï ÏÇΩÏûÖ
+INSERT INTO MEMBER(NO, ID, PWD, NICK, ADMIN_YN) VALUES(SEQ_MEMBER_NO.NEXTVAL, 'admin', '1234', '∞¸∏Æ¿⁄', 'Y'); -- Í¥?Î¶¨ÏûêÍ≥ÑÏ†ï ?ÇΩ?ûÖ
 
 COMMIT;
-
-
-
 
 

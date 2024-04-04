@@ -8,7 +8,7 @@ public class JDBCTemplate {
 		String driver = "oracle.jdbc.driver.OracleDriver";
 		Class.forName(driver);
 		String url = "jdbc:oracle:thin:@localhost:1521:xe";
-		String id = "C##TEST";
+		String id = "C##KH";
 		String pwd = "1234";
 		Connection conn = DriverManager.getConnection(url, id, pwd);
 		return conn;

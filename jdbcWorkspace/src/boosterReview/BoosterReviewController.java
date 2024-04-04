@@ -3,6 +3,7 @@ package boosterReview;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
+import boosterproduct.BoosterProductVo;
 import main.Main;
 import util.JDBCTemplate;
 
@@ -53,11 +54,14 @@ public class BoosterReviewController {
 		System.out.print("내용 : ");
 		String content = Main.SC.nextLine();
 		
+		BoosterProductVo bpvo= new BoosterProductVo();
+		
+		
 		//SQL
 		String sql = "INSERT INTO BOOSTER_REVIEW (BOOSTER_REVIEW_NO, REVIEW, BOOSTER_PRO_NO, MEMBER_NO) VALUES (SEQ_BOOSTER_REVIEW_NO.NEXTVAL, ?, ?, ?)";
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		pstmt.setString(1, review);
-		pstmt.setString(2, 제품번호가져와야함);
+		pstmt.setString(2, bpvo.getBoosterProdNo());
 		pstmt.setString(3, Main.loginMember.getNo());
 		int result = pstmt.executeUpdate();
 		

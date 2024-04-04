@@ -2,6 +2,7 @@ package main;
 
 import java.util.Scanner;
 
+import boosterproduct.BoosterProductController;
 import member.MemberController;
 import member.MemberVo;
 
@@ -11,11 +12,12 @@ public class Main {
 
 	public static void main(String[] args) {
 		MemberController mc = new MemberController();
+		BoosterProductController bpc = new BoosterProductController();
 
 		System.out.println("====MENU====");
 		while (true) {
 			System.out.println("1. MEMBER");
-			System.out.println("2. ...");
+			System.out.println("2. BOOSTER");
 			System.out.println("9. 종료하기");
 
 			System.out.print("메뉴번호: ");
@@ -26,7 +28,7 @@ public class Main {
 				mc.printMenu();
 				break;
 			case "2":
-				System.out.println("구현중..");
+				bpc.printMenu();
 				break;
 			case "9":
 				System.out.println("프로그램 종료");

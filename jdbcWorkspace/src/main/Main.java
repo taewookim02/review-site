@@ -65,6 +65,7 @@ public class Main {
 				break;
 			case "7":
 				nrc.printMenu();
+				break;
 			case "8":
 				bpc.printMenu();
 				break;

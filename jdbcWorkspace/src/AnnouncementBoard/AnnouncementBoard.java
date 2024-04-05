@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import board.BoardVo;
 import main.Main;
 import util.JDBCTemplate;
 
@@ -66,7 +65,9 @@ public class AnnouncementBoard {
 	private void write() throws Exception {
 
 		if (Main.loginMember == null) {
+			System.out.println("=======================");
 			System.err.println("관리자 계정으로 로그인 바랍니다.");
+			System.out.println("=======================");
 			return;
 		}
 
@@ -237,7 +238,7 @@ public class AnnouncementBoard {
 
 		Connection conn = JDBCTemplate.getConn();
 
-		String sql = "SELECT NO, TITLE, CONTENT, ENROLL_DATE FROM ANNOUNCEMENT_BOARD WHERE NO = ? AND DEL_YN = 'N'";
+		String sql = "SELECT A.NO , TITLE , CONTENT , M.NICK , ENROLL_DATE FROM ANNOUNCEMENT_BOARD A JOIN MEMBER M ON M.NO = A.WRITER_NO WHERE A.NO = ? AND A.DEL_YN = 'N'";
 
 		System.out.print("공지사항 번호 선택 : ");
 		String no = Main.SC.nextLine();
@@ -246,26 +247,33 @@ public class AnnouncementBoard {
 
 		ResultSet rs = pstmt.executeQuery();
 
-		List<AnnouncementBoardVo> voList = new ArrayList<AnnouncementBoardVo>();
-		AnnouncementBoardVo Vo = null;
-		while (rs.next()) {
+		AnnouncementBoardVo vo = null;
+		if (rs.next()) {
 			String no2 = rs.getString("NO");
 			String title = rs.getString("TITLE");
 			String content = rs.getString("CONTENT");
+			String nick = rs.getString("NICK");
 			String enrollDate = rs.getString("ENROLL_DATE");
 
-			Vo = new AnnouncementBoardVo(no2, title, content, null, enrollDate, null);
-			voList.add(Vo);
-		}
-		System.out.println("-----------------------------------------------------------------------");
-		System.out.printf("%-5s | %-12s | %-20s | %-20s%n ", "번호", "제목", "내용", "작성일자");
+			vo = new AnnouncementBoardVo();
+			vo.setNo(no2);
+			vo.setTitle(title);
+			vo.setContent(content);
+			vo.setWriterNo(nick);
+			vo.setEnrollDate(enrollDate);
 
-		for (AnnouncementBoardVo vo : voList) {
-			System.out.printf("%-5s | %-12s | %-20s | %-20s%n ", vo.getNo(), vo.getTitle(), vo.getContent(),
-					vo.getEnrollDate());
+			System.out.println("-----------------------------------------------------------------------");
+			System.out.printf("%-5s | %-12s | %-20s | %-5s | %-20s%n ", "번호", "제목", "내용", "작성자", "작성일자");
+			System.out.printf("%-5s | %-12s | %-20s | %-5s | %-20s%n ", vo.getNo(), vo.getTitle(), vo.getContent(),
+					vo.getWriterNo(), vo.getEnrollDate());
+			System.out.println();
+			System.out.println("-----------------------------------------------------------------------");
+
+		} else if (vo == null) {
+			System.out.println("=======================");
+			System.out.println("해당 번호의 공지사항은 없습니다.");
+			System.out.println("=======================");
 		}
-		System.out.println();
-		System.out.println("-----------------------------------------------------------------------");
 
 	}
 
@@ -293,15 +301,21 @@ public class AnnouncementBoard {
 			Vo = new AnnouncementBoardVo(no2, title, content, null, enrollDate, null);
 			voList.add(Vo);
 		}
-		System.out.println("-----------------------------------------------------------------------");
-		System.out.printf("%-5s | %-12s | %-20s | %-20s%n ", "번호", "제목", "내용", "작성일자");
+		if (Vo == null) {
+			System.out.println("=======================");
+			System.out.println("해당 날짜 공지사항은 없습니다.");
+			System.out.println("=======================");
+		} else {
+			System.out.println("-----------------------------------------------------------------------");
+			System.out.printf("%-5s | %-12s | %-20s | %-20s%n ", "번호", "제목", "내용", "작성일자");
 
-		for (AnnouncementBoardVo vo : voList) {
-			System.out.printf("%-5s | %-12s | %-20s | %-20s%n ", vo.getNo(), vo.getTitle(), vo.getContent(),
-					vo.getEnrollDate());
+			for (AnnouncementBoardVo vo : voList) {
+				System.out.printf("%-5s | %-12s | %-20s | %-20s%n ", vo.getNo(), vo.getTitle(), vo.getContent(),
+						vo.getEnrollDate());
+			}
+			System.out.println();
+			System.out.println("-----------------------------------------------------------------------");
 		}
-		System.out.println();
-		System.out.println("-----------------------------------------------------------------------");
 
 	}
 

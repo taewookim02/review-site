@@ -10,6 +10,7 @@ import boosterReview.BoosterReviewVo;
 import main.Main;
 import member.MemberVo;
 import util.JDBCTemplate;
+import util.TablePrinter;
 
 public class BoosterReviewController {
 
@@ -57,8 +58,9 @@ public class BoosterReviewController {
 				PreparedStatement pstmt = conn.prepareStatement(sql);
 				ResultSet rs = pstmt.executeQuery();
 
-				BoosterReviewVo vo = null;
-				MemberVo vo3 = null;
+				ArrayList<BoosterReviewVo> arr = new ArrayList<>();
+
+			
 
 				while (rs.next()) {
 					String boosterReviewNo = rs.getString("BOOSTER_REVIEW_NO");
@@ -66,18 +68,24 @@ public class BoosterReviewController {
 					String nick = rs.getString("NICK");
 					String enrollDate = rs.getString("ENROLL_DATE");
 
-					vo = new BoosterReviewVo();
-					vo3 = new MemberVo();
+					BoosterReviewVo vo = new BoosterReviewVo();
+					MemberVo vo3 = new MemberVo();
 					vo.setBoosterReviewNo(boosterReviewNo);
 					vo.setReviewTitle(reviewTitle);
-					vo3.setNick(nick);
+					vo.setMemberNo(nick);
 					vo.setEnrollDate(enrollDate);
+					
+					arr.add(vo);
+					
+					
 
-					System.out.println(vo.getBoosterReviewNo());
-					System.out.println(vo.getReviewTitle());
-					System.out.println(vo3.getNick());
-					System.out.println(vo.getEnrollDate());
+//					System.out.println(vo.getBoosterReviewNo());
+//					System.out.println(vo.getReviewTitle());
+//					System.out.println(vo3.getNick());
+//					System.out.println(vo.getEnrollDate());
 				}
+				TablePrinter.printRecordsVertically( arr, new String[] {"boosterReviewNo", "reviewTitle", "memberNo", "enrollDate"}
+				,new String[] {"제품번호",  "리뷰 제목", "닉네임", "작성 날짜"});
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -135,6 +143,9 @@ public class BoosterReviewController {
 
 				ResultSet rs = pstmt.executeQuery();
 
+				
+				ArrayList<BoosterReviewVo> arr = new ArrayList<>();
+				
 				BoosterReviewVo vo = null;
 				MemberVo vo3 = null;
 
@@ -152,15 +163,18 @@ public class BoosterReviewController {
 					vo.setReviewTitle(reviewTitle);
 					vo.setReview(review);
 					vo.setBoosterProdNo(boosterProdNo);
-					vo3.setNick(nick);
+					vo.setMemberNo(nick);
 					vo.setEnrollDate(enrollDate);
-
-					System.out.println(vo.getBoosterReviewNo());
-					System.out.println(vo.getReviewTitle());
-					System.out.println(vo.getReview());
-					System.out.println(vo.getBoosterProdNo());
-					System.out.println(vo3.getNick());
-					System.out.println(vo.getEnrollDate());
+					
+					TablePrinter.printRecordsVertically( arr, new String[] {"boosterReviewNo", "reviewTitle", "review", "boosterProdNo", "nick", "enrollDate"}
+					,new String[] {"리뷰 번호", "리뷰 제목", "리뷰 내용", "제품 번호", "제품", "닉네임", "작성 날짜"});
+//
+//					System.out.println(vo.getBoosterReviewNo());
+//					System.out.println(vo.getReviewTitle());
+//					System.out.println(vo.getReview());
+//					System.out.println(vo.getBoosterProdNo());
+//					System.out.println(vo3.getNick());
+//					System.out.println(vo.getEnrollDate());
 				}
 			} else {
 				if (Main.loginMember == null) {
@@ -178,6 +192,7 @@ public class BoosterReviewController {
 //				pstmt2.setString(2, Main.loginMember.getNo());
 
 				ResultSet rs2 = pstmt2.executeQuery();
+				ArrayList<BoosterReviewVo> arr = new ArrayList<>();
 
 				if (rs2.next()) {
 
@@ -201,11 +216,8 @@ public class BoosterReviewController {
 						System.out.println("삭제된 리뷰입니다.");
 					}
 
-					System.out.println(vo2.getBoosterReviewNo());
-					System.out.println(vo2.getReviewTitle());
-					System.out.println(vo2.getReview());
-					System.out.println(vo4.getNick());
-					System.out.println(vo2.getEnrollDate());
+					TablePrinter.printRecordsVertically( arr, new String[] {"boosterReviewNo", "reviewTitle", "review", "boosterProdNo", "nick", "enrollDate"}
+					,new String[] {"리뷰 번호", "리뷰 제목", "리뷰 내용", "제품 번호", "제품", "닉네임", "작성 날짜"});
 					
 //					if(vo4.getNick() == Main.loginMember.getNick()) {
 //						System.out.println("리뷰남길지말지여부나중에하기");
@@ -406,17 +418,13 @@ public class BoosterReviewController {
 				return;
 			}
 			
-			System.out.printf("%-5s | %-15s | %-20s | %-5s | %-20s%n", "번호", "리뷰 제목","리뷰 내용" ,"작성자", "작성 날짜");
+			TablePrinter.printRecordsVertically( arr1, new String[] {"boosterReviewNo", "reviewTitle", "review",  "memberNo", "enrollDate"}
+			,new String[] {"제품번호",  "리뷰 제목","리뷰 내용",  "닉네임", "작성 날짜"});
 			
-			
-			for(BoosterReviewVo brv1 : arr1) {
-				System.out.printf("%-6s | %-17s | %-23s| %-5s | %-19s%n", brv1.getBoosterReviewNo(), brv1.getReviewTitle(),brv1.getReview() ,brv1.getMemberNo(), brv1.getEnrollDate());
-				
-			}
 		}else {
 		Connection conn = JDBCTemplate.getConn();
 		
-		String sql = "SELECT R.BOOSTER_REVIEW_NO, R.REVIEW_TITLE, R.REVIEW ,M.NICK ,TO_CHAR(R.ENROLL_DATE, 'YYYY-MM-DD HH:MI:SS') AS ENROLL_DATE FROM BOOSTER_REVIEW R JOIN MEMBER M ON R.WRITER_NO = M.NO WHERE R.QUIT_YN = 'N'AND M.NICK = ?";
+		String sql = "SELECT R.BOOSTER_REVIEW_NO, R.REVIEW_TITLE, R.REVIEW ,M.NICK ,TO_CHAR(R.ENROLL_DATE, 'YYYY-MM-DD HH:MI:SS') AS ENROLL_DATE FROM BOOSTER_REVIEW R JOIN MEMBER M ON R.MEMBER_NO = M.NO WHERE R.QUIT_YN = 'N'AND M.NICK = ?";
 		System.out.println("찾을 작성자 닉네임 : ");
 		String name = Main.SC.nextLine();
 		
@@ -444,13 +452,8 @@ public class BoosterReviewController {
 			return;
 		}
 		
-		 System.out.printf("%-5s | %-15s | %-20s | %-5s | %-20s%n", "번호", "리뷰 제목", "리뷰 내용","작성자", "작성 날짜");
-
-
-		for(BoosterReviewVo brv : arr) {
-			 System.out.printf("%-6s | %-17s | %-23s | %-5s | %-19s%n", brv.getBoosterReviewNo(), brv.getReviewTitle(),brv.getReview(),brv.getMemberNo(), brv.getEnrollDate());
-
-		}
+		TablePrinter.printRecordsVertically( arr, new String[] {"boosterReviewNo", "reviewTitle", "review",  "memberNo", "enrollDate"}
+		,new String[] {"제품번호",  "리뷰 제목","리뷰 내용",  "닉네임", "작성 날짜"});
 	}
 	}
 }

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import main.Main;
 import util.JDBCTemplate;
+import util.TablePrinter;
 
 public class BoosterProductController {
 
@@ -40,6 +41,8 @@ public class BoosterProductController {
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 
 			ResultSet rs = pstmt.executeQuery();
+			ArrayList<BoosterProductVo> arr = new ArrayList<>();
+
 
 			BoosterProductVo vo = null;
 			
@@ -57,9 +60,18 @@ public class BoosterProductController {
 				vo.setIsDiscountinuedYn(isDiscountinuedYn);
 				vo.setDescription(description);
 				
-//				ArrayList<BoosterProductVo> voList = new ArrayList<>();
-//
-//				TablePrinter.printTable(voList, new String[] {"BOOSTER_PROD_NO", "NAME", "PRICE", "IS_DISCOUNTINUED_YN", "DESCRIPTION"}, new String[] {"제품번호", "제품명", "가격", "알아서", "설명"};
+				arr.add(vo);
+				
+				/*
+				 * this.boosterProdNo = boosterProdNo;
+		this.name = name;
+		this.price = price;
+		this.isDiscountinuedYn = isDiscountinuedYn;
+		this.description = description;
+				 * */
+
+				TablePrinter.printRecordsVertically( arr, new String[] {"boosterProdNo", "name", "price", "isDiscountinuedYn", "description"}
+					,new String[] {"제품번호", "제품명", "가격", "단종 여부", "제품 설명"});
 				
 				
 //				System.out.println("----------------------------");
@@ -90,6 +102,7 @@ public class BoosterProductController {
 			ResultSet rs = pstmt.executeQuery();
 
 			BoosterProductVo vo = null;
+			ArrayList<BoosterProductVo> arr = new ArrayList<>();
 
 			while (rs.next()) {
 				String boosterProdNo = rs.getString("BOOSTER_PROD_NO");
@@ -105,7 +118,10 @@ public class BoosterProductController {
 				vo.setIsDiscountinuedYn(isDiscountinuedYn);
 				vo.setDescription(description);
 
-				System.out.println(vo.getBoosterProdNo() + " | " + vo.getName() + " | " + vo.getPrice());
+				arr.add(vo);
+				
+				TablePrinter.printRecordsVertically( arr, new String[] {"boosterProdNo", "name", "price", "isDiscountinuedYn", "description"}
+				,new String[] {"제품번호", "제품명", "가격", "단종 여부", "제품 설명"});
 				}
 			
 			System.out.println("상품에 대해 리뷰를 작성하시겠습니까? Y/N");

@@ -67,7 +67,7 @@ public class MemberController {
 		System.out.println("1. 로그아웃");
 		System.out.println("2. 비밀번호 변경");
 		System.out.println("3. 닉네임 변경");
-		System.out.println("4. 회원 전체 목록");
+		System.out.println("4. 활동중인 회원 목록");
 		System.out.println("5. 탈퇴한 회원 목록");
 		System.out.println("6. 회원 상세 조회");
 		System.out.println("7. 회원 탈퇴시키기");
@@ -89,7 +89,7 @@ public class MemberController {
 			changeNick();
 			break;
 		case "4":
-			// 회원 전체 목록 조회 (관리자 전용)
+			// 활동중인 회원 목록 (관리자 전용)
 			selectAllMembers();
 			break;
 		case "5":
@@ -117,7 +117,27 @@ public class MemberController {
 	}
 
 	private void banMember() {
-		// TODO Auto-generated method stub
+		try {
+			Connection conn = JDBCTemplate.getConn();
+			String sql = "UPDATE MEMBER SET QUIT_YN = 'Y' WHERE NO = ?";
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			
+			System.out.print("탈퇴시킬 회원번호: ");
+			String inputNo = Main.SC.nextLine();
+			pstmt.setString(1, inputNo );
+			
+			int r = pstmt.executeUpdate();
+			
+			if (r != 1) {
+				System.out.println("탈퇴과정 실패");
+				return;
+			}
+			
+			System.out.println("탈퇴과정 성공!");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 
@@ -200,7 +220,7 @@ public class MemberController {
 	private void selectAllMembers() {
 		try {
 			Connection conn = JDBCTemplate.getConn();
-			String sql = "SELECT * FROM MEMBER ORDER BY NO ASC";
+			String sql = "SELECT * FROM MEMBER WHERE QUIT_YN = 'N' ORDER BY NO ASC";
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 
 			ResultSet rs = pstmt.executeQuery();

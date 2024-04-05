@@ -120,9 +120,9 @@ public class BoosterProductController {
 
 				arr.add(vo);
 				
-				TablePrinter.printRecordsVertically( arr, new String[] {"boosterProdNo", "name", "price", "isDiscountinuedYn", "description"}
-				,new String[] {"제품번호", "제품명", "가격", "단종 여부", "제품 설명"});
 				}
+			TablePrinter.printRecordsVertically( arr, new String[] {"boosterProdNo", "name", "price", "isDiscountinuedYn", "description"}
+			,new String[] {"제품번호", "제품명", "가격", "단종 여부", "제품 설명"});
 			
 			System.out.println("상품에 대해 리뷰를 작성하시겠습니까? Y/N");
 			String reviewYn = Main.SC.nextLine();

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import main.Main;
 import util.JDBCTemplate;
+import util.TablePrinter;
 
 public class FoodProdController {
 	
@@ -61,17 +62,12 @@ public void lookUpRecent() throws Exception{
 	}
 	
 	if(found = false) {
-		System.out.println("게시물 조회 실패");
+		System.out.println("리뷰 조회 실패");
 		return;
 	}
 	
-	 System.out.printf("%-5s | %-15s | %-10s | %-5s | %-20s%n", "번호", "제품 이름", "가격", "단종 여부", "제품 설명");
-
-
-	for(FoodProdVo fpv : arr) {
-		 System.out.printf("%-6s | %-15s | %-10s | %-8s | %-20s%n", fpv.getFoodProdNo(), fpv.getFoodProdName(), fpv.getPrice(), fpv.getIsDidcount(), fpv.getDescription());
-
-	}
+	TablePrinter.printTable( arr , new String[] {"foodProdNo", "foodProdName", "price", "isDidcount", "description"}, 
+			new String [] {"번호", "상품명", "가격", "단종 여부", "제품 설명"});
 	
 }
 
@@ -105,22 +101,17 @@ public void lookUpName() throws Exception{
 		
 	}
 	if(found = false) {
-		System.out.println("게시물 조회 실패");
+		System.out.println("리뷰 조회 실패");
 		return;
 	}
+	TablePrinter.printTable( arr , new String[] {"foodProdNo", "foodProdName", "price", "isDidcount", "description"}, 
+			new String [] {"번호", "상품명", "가격", "단종 여부", "제품 설명"});
 	
-	 System.out.printf("%-5s | %-15s | %-10s | %-5s | %-20s%n", "번호", "제품 이름", "가격", "단종 여부", "제품 설명");
-
-
-	for(FoodProdVo fpv : arr) {
-		 System.out.printf("%-6s | %-15s | %-10s | %-8s | %-20s%n", fpv.getFoodProdNo(), fpv.getFoodProdName(), fpv.getPrice(), fpv.getIsDidcount(), fpv.getDescription());
-
-	}
 	
-	System.out.print("리뷰를 남기겠습니까? (yes or no) : ");
+	System.out.print("상품에 대해 리뷰를 작성하시겠습니까? Y/N ");
 	String yon = Main.SC.nextLine();
 	
-	if(yon.equals("yes")) {
+	if(yon.equals("Y")) {
 		if(Main.loginMember == null) {
 			System.out.println("로그인이 필요 합니다");
 			return;
@@ -151,7 +142,7 @@ public void lookUpName() throws Exception{
 		}
 		System.out.println("리뷰 등록 완료");
 
-	} else if(yon.equals("no")) {
+	} else if(yon.equals("N")) {
 		return;
 	} 
 	}
@@ -184,10 +175,10 @@ public void addFood() throws Exception{
 	int result = pstmt.executeUpdate();
 	
 	if(result != 1) {
-		System.out.println("추가 실패 하였습니다.");
+		System.out.println("상품 등록 실패하셨습니다.");
 		return;
 	}
-	System.out.println("추가 완료 하였습니다.");
+	System.out.println("상품 등록 완료하셨습니다.");
 } 
 
 

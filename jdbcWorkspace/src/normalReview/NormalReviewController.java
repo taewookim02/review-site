@@ -207,7 +207,7 @@ public class NormalReviewController {
 				return;
 			}
 			
-			TablePrinter.printTable( arr1 , new String[] {"normalReviewlNo", "normalReviewTilte", "writerNo", "enrollDate"}, 
+			TablePrinter.printRecordsVertically( arr1 , new String[] {"normalReviewlNo", "normalReviewTilte", "writerNo", "enrollDate"}, 
 					new String [] {"번호", "리뷰 제목", "작성자", "작성 시간"});
 		}else {
 		Connection conn = JDBCTemplate.getConn();
@@ -236,7 +236,7 @@ public class NormalReviewController {
 				return;
 			}
 			
-			TablePrinter.printTable( arr , new String[] {"normalReviewlNo", "normalReviewTilte", "writerNo", "enrollDate"}, 
+			TablePrinter.printRecordsVertically( arr , new String[] {"normalReviewlNo", "normalReviewTilte", "writerNo", "enrollDate"}, 
 					new String [] {"번호", "리뷰 제목", "작성자", "작성 시간"});
 				
 			}  
@@ -278,7 +278,7 @@ public class NormalReviewController {
 				return;
 			}
 			
-			TablePrinter.printTable( arr1 , new String[] {"normalReviewlNo", "normalReviewTilte", "normalReview","writerNo", "enrollDate"}, 
+			TablePrinter.printRecordsVertically( arr1 , new String[] {"normalReviewlNo", "normalReviewTilte", "normalReview","writerNo", "enrollDate"}, 
 					new String [] {"번호", "리뷰 제목","리뷰 내용" ,"작성자", "작성 시간"});
 		}else {
 		Connection conn = JDBCTemplate.getConn();
@@ -311,7 +311,7 @@ public class NormalReviewController {
 			return;
 		}
 		
-		TablePrinter.printTable( arr , new String[] {"normalReviewlNo", "normalReviewTilte","normalReview" ,"writerNo", "enrollDate"}, 
+		TablePrinter.printRecordsVertically( arr , new String[] {"normalReviewlNo", "normalReviewTilte","normalReview" ,"writerNo", "enrollDate"}, 
 				new String [] {"번호", "리뷰 제목","리뷰 내용" ,"작성자", "작성 시간"});
 	}
 	}

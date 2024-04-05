@@ -68,7 +68,9 @@ public class MemberController {
 		System.out.println("2. 비밀번호 변경");
 		System.out.println("3. 닉네임 변경");
 		System.out.println("4. 회원 전체 목록");
-		System.out.println("5. 회원 상세 조회");
+		System.out.println("5. 탈퇴한 회원 목록");
+		System.out.println("6. 회원 상세 조회");
+		System.out.println("7. 회원 탈퇴시키기");
 		System.out.println("9. 이전 메뉴로 돌아가기");
 
 		System.out.print("메뉴 번호: ");
@@ -91,8 +93,16 @@ public class MemberController {
 			selectAllMembers();
 			break;
 		case "5":
+			// 탈퇴한 회원 목록 (관리자 전용)
+			selectQuitMembers();
+			break;
+		case "6":
 			// 회원 상세 조회 (관리자 전용)
 			selectOneMember();
+			break;
+		case "7":
+			// 회원 탈퇴시키기 (관리자 전용)
+			banMember();
 			break;
 		case "9":
 			System.out.println("=============");
@@ -104,6 +114,11 @@ public class MemberController {
 			System.out.println("잘못 입력하셨습니다.");
 			break;
 		}
+	}
+
+	private void banMember() {
+		// TODO Auto-generated method stub
+
 	}
 
 	private void printGuestMenu() {
@@ -226,6 +241,46 @@ public class MemberController {
 			}
 			System.out.println("-".repeat(99));
 
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	private void selectQuitMembers() {
+		try {
+			Connection conn = JDBCTemplate.getConn();
+			String sql = "SELECT * FROM MEMBER WHERE QUIT_YN = 'Y'";
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+
+			ResultSet rs = pstmt.executeQuery();
+			ArrayList<MemberVo> voList = new ArrayList<>();
+
+			while (rs.next()) {
+				String no = rs.getString("NO");
+				String id = rs.getString("ID");
+				String pwd = rs.getString("PWD");
+				String nick = rs.getString("NICK");
+				String joinDate = rs.getString("JOIN_DATE");
+				String modifydate = rs.getString("MODIFY_DATE");
+				String quitYn = rs.getString("QUIT_YN");
+				String adminYn = rs.getString("ADMIN_YN");
+
+				MemberVo vo = new MemberVo(no, id, pwd, nick, joinDate, modifydate, quitYn, adminYn);
+				voList.add(vo);
+			}
+
+			if (voList.isEmpty()) {
+				System.out.println("=============");
+				System.out.println("탈퇴한 회원이 없습니다.");
+				System.out.println("=============");
+				return;
+			}
+
+			for (MemberVo reVo : voList) {
+				System.out.println(reVo);
+			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

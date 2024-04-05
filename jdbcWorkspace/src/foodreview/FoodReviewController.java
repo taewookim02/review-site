@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import main.Main;
 import util.JDBCTemplate;
+import util.TablePrinter;
 
 
 public class FoodReviewController {
@@ -40,7 +41,7 @@ public class FoodReviewController {
 
 		public void write() throws Exception {
 		if (Main.loginMember == null) {
-			System.out.println("로그인 필요");
+			System.out.println("로그인이 필요합니다");
 			return;
 		}
 
@@ -73,7 +74,7 @@ public class FoodReviewController {
 	public void delete() throws Exception {
 
 		if (Main.loginMember == null) {
-			System.out.println("로그인 필요");
+			System.out.println("로그인이 필요합니다");
 			return;
 		}
 
@@ -119,7 +120,7 @@ public class FoodReviewController {
 
 	public void editTitle() throws Exception {
 		if (Main.loginMember == null) {
-			System.out.println("로그인 필요");
+			System.out.println("로그인이 필요 합니다");
 			return;
 		}
 //		System.out.println(Main.loginMember.getNo()); // 2
@@ -127,9 +128,9 @@ public class FoodReviewController {
 
 		String sql = "UPDATE FOOD_REVIEW SET REVIEW_TITLE = ? WHERE FOOD_REVIEW_NO = ? AND WRITER_NO = ?";
 
-		System.out.println("수정 할 리뷰 번호 : ");
+		System.out.println("제목 수정할 리뷰 번호 : ");
 		String num = Main.SC.nextLine();
-		System.out.println("수정 할 리뷰 제목 : ");
+		System.out.println("수정할 리뷰 제목 : ");
 		String title = Main.SC.nextLine();
 
 		PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -150,16 +151,16 @@ public class FoodReviewController {
 	public void editContent() throws Exception {
 		
 		if (Main.loginMember == null) {
-			System.out.println("로그인 필요");
+			System.out.println("로그인이 필요 합니다");
 			return;
 		}
 		Connection conn = JDBCTemplate.getConn();
 
 		String sql = "UPDATE FOOD_REVIEW SET REVIEW = ? WHERE FOOD_REVIEW_NO = ? AND WRITER_NO = ?";
 
-		System.out.println("수정 할 리뷰 번호 : ");
+		System.out.println("내용 수정할 리뷰 번호 : ");
 		String num = Main.SC.nextLine();
-		System.out.println("수정 할 리뷰 내용 : ");
+		System.out.println("수정할 리뷰 내용 : ");
 		String content = Main.SC.nextLine();
 
 		PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -207,13 +208,9 @@ public class FoodReviewController {
 				return;
 			}
 			
-			System.out.printf("%-5s | %-15s | %-5s | %-20s%n", "번호", "리뷰 제목", "작성자", "작성 날짜");
+			TablePrinter.printTable( arr1 , new String[] {"foodReviewNo", "reviewTitle", "writerNo", "enrollDate"}, 
+					new String [] {"번호", "리뷰 제목", "작성자", "작성 시간"});
 			
-			
-			for(FoodReviewVo frv1 : arr1) {
-				System.out.printf("%-6s | %-17s | %-5s | %-19s%n", frv1.getFoodReviewNo(), frv1.getReviewTitle(), frv1.getWriterNo(), frv1.getEnrollDate());
-				
-			}
 			}else {
 		Connection conn = JDBCTemplate.getConn();
 		
@@ -241,15 +238,10 @@ public class FoodReviewController {
 				return;
 			}
 			
-			 System.out.printf("%-5s | %-15s | %-5s | %-20s%n", "번호", "리뷰 제목", "작성자", "작성 날짜");
 
-
-			for(FoodReviewVo frv : arr) {
-				 System.out.printf("%-6s | %-17s | %-5s | %-19s%n", frv.getFoodReviewNo(), frv.getReviewTitle(), frv.getWriterNo(), frv.getEnrollDate());
-
+			TablePrinter.printTable( arr , new String[] {"foodReviewNo", "reviewTitle", "writerNo", "enrollDate"}, 
+					new String [] {"번호", "리뷰 제목", "작성자", "작성 시간"});
 			}
-				
-			}  
 		
 		
 	}
@@ -261,7 +253,7 @@ public class FoodReviewController {
 			Connection conn1 = JDBCTemplate.getConn();
 			
 			String sql1 = "SELECT R.FOOD_REVIEW_NO, R.REVIEW_TITLE, R.REVIEW,M.NICK ,TO_CHAR(R.ENROLL_DATE, 'YYYY-MM-DD HH:MI:SS') AS ENROLL_DATE FROM FOOD_REVIEW R JOIN MEMBER M ON R.WRITER_NO = M.NO WHERE M.NICK = ?";
-			System.out.println("찾을 작성자 닉네임 : ");
+			System.out.println("찾을 리뷰 작성자 닉네임 : ");
 			String name1 = Main.SC.nextLine();
 			
 			PreparedStatement pstmt1 = conn1.prepareStatement(sql1);
@@ -288,13 +280,8 @@ public class FoodReviewController {
 				return;
 			}
 			
-			System.out.printf("%-5s | %-15s | %-20s | %-5s | %-20s%n", "번호", "리뷰 제목","리뷰 내용" ,"작성자", "작성 날짜");
-			
-			
-			for(FoodReviewVo frv1 : arr1) {
-				System.out.printf("%-6s | %-17s | %-23s| %-5s | %-19s%n", frv1.getFoodReviewNo(), frv1.getReviewTitle(),frv1.getReview() ,frv1.getWriterNo(), frv1.getEnrollDate());
-				
-			}
+			TablePrinter.printTable( arr1 , new String[] {"foodReviewNo", "reviewTitle","review" ,"foodProdNo", "enrollDate"}, 
+					new String [] {"번호", "리뷰 제목","리뷰 내용" ,"제품명", "작성 시간"});
 		}else {
 		Connection conn = JDBCTemplate.getConn();
 		
@@ -326,13 +313,8 @@ public class FoodReviewController {
 			return;
 		}
 		
-		 System.out.printf("%-5s | %-15s | %-20s | %-5s | %-20s%n", "번호", "리뷰 제목", "리뷰 내용","작성자", "작성 날짜");
-
-
-		for(FoodReviewVo frv : arr) {
-			 System.out.printf("%-6s | %-17s | %-23s | %-5s | %-19s%n", frv.getFoodReviewNo(), frv.getReviewTitle(),frv.getReview(),frv.getWriterNo(), frv.getEnrollDate());
-
-		}
+		TablePrinter.printTable( arr , new String[] {"foodReviewNo", "reviewTitle","review" ,"writerNo", "enrollDate"}, 
+				new String [] {"번호", "리뷰 제목","리뷰 내용" ,"작성자", "작성 시간"});
 	}
 	}
 	

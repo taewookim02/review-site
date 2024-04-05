@@ -109,7 +109,7 @@ public class BoosterProductController {
 			if(reviewYn.equals("Y")) {
 				System.out.println("1");
 				if (Main.loginMember == null) {
-					System.out.println("로그인 하고 오세요");
+					System.out.println("로그인이 필요합니다.");
 					return;
 				}
 				
@@ -129,10 +129,10 @@ public class BoosterProductController {
 					int result = pstmt2.executeUpdate();
 
 					if (result != 1) {
-						System.out.println("게시글 작성 실패 ... ");
+						System.out.println("리뷰 작성 실패");
 						return;
 					}
-					System.out.println("게시글 작성 성공 ! ");
+					System.out.println("리뷰 등록 완료");
 				}
 			
 		} catch (Exception e) {
@@ -163,10 +163,10 @@ public class BoosterProductController {
 
 			// result
 			if (result != 1) {
-				System.out.println("등록실패 ");
+				System.out.println("상품 등록 실패하셨습니다");
 				return;
 			}
-			System.out.println("등록 성공 ! ");
+			System.out.println("상품 등록 성공하셨습니다");
 
 		} catch (Exception e) {
 			e.printStackTrace();

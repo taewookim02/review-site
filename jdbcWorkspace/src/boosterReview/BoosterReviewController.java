@@ -3,23 +3,25 @@ package boosterReview;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 import boosterproduct.BoosterProductVo;
+import boosterReview.BoosterReviewVo;
 import main.Main;
 import member.MemberVo;
 import util.JDBCTemplate;
 
 public class BoosterReviewController {
 
-	public void printMenu() {
+	public void printMenu() throws Exception {
 		System.out.println("====BOOSTER REVIEW====");
-		System.out.println("1. 구매후기 작성");
-		System.out.println("2. 리뷰 조회");
-		System.out.println("3. 리뷰 삭제");
-		System.out.println("4. 리뷰 제목수정");
-		System.out.println("5. 리뷰 내용수정");
-		System.out.println("6. 리뷰 전체 목록 조회");
-		System.out.print("메뉴 번호 : ");
+		System.out.println("1. 리뷰 작성");
+		System.out.println("2. 리뷰 삭제");
+		System.out.println("3. 리뷰 제목 수정");
+		System.out.println("4. 리뷰 내용 수정");
+		System.out.println("5. 리뷰 목록 조회");
+		System.out.println("6. 리뷰 상세 조회 (작성자명)");
+		System.out.print("번호 입력 : ");
 		String menu = Main.SC.nextLine();
 
 		switch (menu) {
@@ -27,34 +29,71 @@ public class BoosterReviewController {
 			write();
 			break;
 		case "2":
-			selectReview();
-			break;
-		case "3":
 			deleteBoard();
 			break;
-		case "4":
+		case "3":
 			updateTitle();
 			break;
-		case "5":
+		case "4":
 			updateContent();
 			break;
+		case "5":
+			lookUp();
+			break;
 		case "6":
-			selectReviewList();
+			searchWriter();
 		default:
 			break;
 		}
 	}
+	
+	public void lookUp() {
+
+			try {
+				Connection conn = JDBCTemplate.getConn();
+
+				String sql = "SELECT BOOSTER_REVIEW_NO, REVIEW_TITLE, M.NICK, ENROLL_DATE FROM BOOSTER_REVIEW R JOIN MEMBER M ON R.MEMBER_NO = M.NO";
+
+				PreparedStatement pstmt = conn.prepareStatement(sql);
+				ResultSet rs = pstmt.executeQuery();
+
+				BoosterReviewVo vo = null;
+				MemberVo vo3 = null;
+
+				while (rs.next()) {
+					String boosterReviewNo = rs.getString("BOOSTER_REVIEW_NO");
+					String reviewTitle = rs.getString("REVIEW_TITLE");
+					String nick = rs.getString("NICK");
+					String enrollDate = rs.getString("ENROLL_DATE");
+
+					vo = new BoosterReviewVo();
+					vo3 = new MemberVo();
+					vo.setBoosterReviewNo(boosterReviewNo);
+					vo.setReviewTitle(reviewTitle);
+					vo3.setNick(nick);
+					vo.setEnrollDate(enrollDate);
+
+					System.out.println(vo.getBoosterReviewNo());
+					System.out.println(vo.getReviewTitle());
+					System.out.println(vo3.getNick());
+					System.out.println(vo.getEnrollDate());
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	
 
 	public void write() {
 
 		if (Main.loginMember == null) {
-			System.out.println("로그인 하고 오세요");
+			System.out.println("로그인이 필요합니다.");
 			return;
 		}
 		try {
 			Connection conn = JDBCTemplate.getConn();
 
-			System.out.println("리뷰할 제품 번호 : ");
+			System.out.println("제품 번호 (oniy number) : ");
 			String no = Main.SC.nextLine();
 			System.out.println("리뷰 제목 : ");
 			String reviewTitle = Main.SC.nextLine();
@@ -70,10 +109,10 @@ public class BoosterReviewController {
 			int result = pstmt.executeUpdate();
 
 			if (result != 1) {
-				System.out.println("게시글 작성 실패 ... ");
+				System.out.println("리뷰 작성 실패");
 				return;
 			}
-			System.out.println("게시글 작성 성공 ! ");
+			System.out.println("리뷰 등록 완료");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -125,7 +164,7 @@ public class BoosterReviewController {
 				}
 			} else {
 				if (Main.loginMember == null) {
-					System.out.println("로그인하고 오세요.");
+					System.out.println("로그인이 필요합니다.");
 					return;
 				}
 				System.out.println(Main.loginMember.getNick() + " 님 환영합니다!");
@@ -196,10 +235,10 @@ public class BoosterReviewController {
 				int result = pstmt.executeUpdate();
 
 				if (result != 1) {
-					System.out.println("리뷰 삭제  실패 ... ");
+					System.out.println("리뷰 삭제  실패");
 					return;
 				}
-				System.out.println("리뷰 삭제 성공 ! ");
+				System.out.println("리뷰 삭제 성공");
 
 			} else if (Main.loginMember.getAdmin_yn().equals("N")) {
 				System.out.print("삭제할 리뷰 번호 : ");
@@ -214,12 +253,12 @@ public class BoosterReviewController {
 				int result = pstmt.executeUpdate();
 
 				if (result != 1) {
-					System.out.println("리뷰 삭제  실패 ... ");
+					System.out.println("리뷰 삭제  실패");
 					return;
 				}
-				System.out.println("리뷰 삭제 성공 ! ");
+				System.out.println("리뷰 삭제 성공");
 			} else {
-				System.out.println("로그인 하고 오세요");
+				System.out.println("로그인이 필요합니다.");
 				return;
 			}
 		} catch (Exception e) {
@@ -235,7 +274,7 @@ public class BoosterReviewController {
 			if (Main.loginMember.getAdmin_yn().equals("Y")) {
 				System.out.print("제목 수정할 리뷰 번호 : ");
 				String no = Main.SC.nextLine();
-				System.out.print("수정할 제목 : ");
+				System.out.print("수정할 리뷰 제목 : ");
 				String title = Main.SC.nextLine();
 
 				String sql = "UPDATE BOOSTER_REVIEW SET REVIEW_TITLE = ? WHERE BOOSTER_REVIEW_NO = ?";
@@ -254,7 +293,7 @@ public class BoosterReviewController {
 			} else if (Main.loginMember.getAdmin_yn().equals("N")) {
 				System.out.print("제목 수정할 리뷰 번호 : ");
 				String no = Main.SC.nextLine();
-				System.out.print("수정할 제목 : ");
+				System.out.print("수정할 리뷰 제목 : ");
 				String title = Main.SC.nextLine();
 
 				String sql = "UPDATE BOOSTER_REVIEW SET REVIEW_TITLE = ? WHERE BOOSTER_REVIEW_NO = ? AND MEMBER_NO = ?";
@@ -267,12 +306,12 @@ public class BoosterReviewController {
 				int result = pstmt.executeUpdate();
 
 				if (result != 1) {
-					System.out.println("제목 수정 실패 ... ");
+					System.out.println("제목 수정 실패");
 					return;
 				}
-				System.out.println("제목 수정 성공 ! ");
+				System.out.println("제목 수정 성공");
 			} else {
-				System.out.println("로그인 하고 오세요");
+				System.out.println("로그인이 필요합니다.");
 				return;
 			}
 		} catch (Exception e) {
@@ -288,7 +327,7 @@ public class BoosterReviewController {
 			if (Main.loginMember.getAdmin_yn().equals("Y")) {
 				System.out.print("내용 수정할 리뷰 번호 : ");
 				String no = Main.SC.nextLine();
-				System.out.print("수정할 내용 : ");
+				System.out.print("수정할 리뷰 내용 : ");
 				String content = Main.SC.nextLine();
 
 				String sql = "UPDATE BOOSTER_REVIEW SET REVIEW = ? WHERE BOOSTER_REVIEW_NO = ?";
@@ -299,15 +338,15 @@ public class BoosterReviewController {
 				int result = pstmt.executeUpdate();
 
 				if (result != 1) {
-					System.out.println("내용 수정 실패 ... ");
+					System.out.println("내용 수정 실패");
 					return;
 				}
-				System.out.println("내용 수정 성공 ! ");
+				System.out.println("내용 수정 성공");
 
 			} else if (Main.loginMember.getAdmin_yn().equals("N")) {
 				System.out.print("내용 수정할 리뷰 번호 : ");
 				String no = Main.SC.nextLine();
-				System.out.print("수정할 내용 : ");
+				System.out.print("수정할 리뷰 내용 : ");
 				String content = Main.SC.nextLine();
 
 				String sql = "UPDATE BOOSTER_REVIEW SET REVIEW = ? WHERE BOOSTER_REVIEW_NO = ? AND MEMBER_NO = ?";
@@ -320,12 +359,12 @@ public class BoosterReviewController {
 				int result = pstmt.executeUpdate();
 
 				if (result != 1) {
-					System.out.println("내용 수정 실패 ... ");
+					System.out.println("내용 수정 실패");
 					return;
 				}
-				System.out.println("내용 수정 성공 ! ");
+				System.out.println("내용 수정 성공");
 			} else {
-				System.out.println("로그인 하고 오세요");
+				System.out.println("로그인이 필요합니다.");
 				return;
 			}
 		} catch (Exception e) {
@@ -333,39 +372,85 @@ public class BoosterReviewController {
 		}
 	}
 
-	public void selectReviewList() {
-
-		try {
-			Connection conn = JDBCTemplate.getConn();
-
-			String sql = "SELECT BOOSTER_REVIEW_NO, REVIEW_TITLE, M.NICK, ENROLL_DATE FROM BOOSTER_REVIEW R JOIN MEMBER M ON R.MEMBER_NO = M.NO";
-
-			PreparedStatement pstmt = conn.prepareStatement(sql);
-			ResultSet rs = pstmt.executeQuery();
-
-			BoosterReviewVo vo = null;
-			MemberVo vo3 = null;
-
-			while (rs.next()) {
-				String boosterReviewNo = rs.getString("BOOSTER_REVIEW_NO");
-				String reviewTitle = rs.getString("REVIEW_TITLE");
-				String nick = rs.getString("NICK");
-				String enrollDate = rs.getString("ENROLL_DATE");
-
-				vo = new BoosterReviewVo();
-				vo3 = new MemberVo();
-				vo.setBoosterReviewNo(boosterReviewNo);
-				vo.setReviewTitle(reviewTitle);
-				vo3.setNick(nick);
-				vo.setEnrollDate(enrollDate);
-
-				System.out.println(vo.getBoosterReviewNo());
-				System.out.println(vo.getReviewTitle());
-				System.out.println(vo3.getNick());
-				System.out.println(vo.getEnrollDate());
+	public void searchWriter() throws Exception {
+		
+		if(Main.loginMember != null && Main.loginMember.getAdmin_yn().equals("Y")) {
+			
+			Connection conn1 = JDBCTemplate.getConn();
+			
+			String sql1 = "SELECT R.BOOSTER_REVIEW_NO, R.REVIEW_TITLE, R.REVIEW,M.NICK ,TO_CHAR(R.ENROLL_DATE, 'YYYY-MM-DD HH:MI:SS') AS ENROLL_DATE FROM BOOSTER_REVIEW R JOIN MEMBER M ON R.MEMBER_NO = M.NO WHERE M.NICK = ?";
+			System.out.println("찾을 작성자 닉네임 : ");
+			String name1 = Main.SC.nextLine();
+			
+			PreparedStatement pstmt1 = conn1.prepareStatement(sql1);
+			pstmt1.setString(1, name1);
+			
+			ResultSet rs1 = pstmt1.executeQuery();
+			
+			ArrayList<BoosterReviewVo> arr1 = new ArrayList<BoosterReviewVo>();
+			boolean found1 = false;
+			while(rs1.next()) {
+				found1 = true;
+				String no = rs1.getString("BOOSTER_REVIEW_NO");
+				String title = rs1.getString("REVIEW_TITLE");
+				String content = rs1.getString("REVIEW");
+				String nick = rs1.getString("NICK");
+				String enrolldate = rs1.getString("ENROLL_DATE");
+				
+				BoosterReviewVo brv1 = new BoosterReviewVo(no, title, content, null, nick, enrolldate, null);
+				arr1.add(brv1);
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+			
+			if(found1 = false) {
+				System.out.println("리뷰 조회 실패");
+				return;
+			}
+			
+			System.out.printf("%-5s | %-15s | %-20s | %-5s | %-20s%n", "번호", "리뷰 제목","리뷰 내용" ,"작성자", "작성 날짜");
+			
+			
+			for(BoosterReviewVo brv1 : arr1) {
+				System.out.printf("%-6s | %-17s | %-23s| %-5s | %-19s%n", brv1.getBoosterReviewNo(), brv1.getReviewTitle(),brv1.getReview() ,brv1.getMemberNo(), brv1.getEnrollDate());
+				
+			}
+		}else {
+		Connection conn = JDBCTemplate.getConn();
+		
+		String sql = "SELECT R.BOOSTER_REVIEW_NO, R.REVIEW_TITLE, R.REVIEW ,M.NICK ,TO_CHAR(R.ENROLL_DATE, 'YYYY-MM-DD HH:MI:SS') AS ENROLL_DATE FROM BOOSTER_REVIEW R JOIN MEMBER M ON R.WRITER_NO = M.NO WHERE R.QUIT_YN = 'N'AND M.NICK = ?";
+		System.out.println("찾을 작성자 닉네임 : ");
+		String name = Main.SC.nextLine();
+		
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, name);
+		
+		ResultSet rs = pstmt.executeQuery();
+		
+		ArrayList<BoosterReviewVo> arr = new ArrayList<BoosterReviewVo>();
+		boolean found = false;
+		while(rs.next()) {
+			found = true;
+			String no = rs.getString("BOOSTER_REVIEW_NO");
+			String title = rs.getString("REVIEW_TITLE");
+			String content = rs.getString("REVIEW");
+			String nick = rs.getString("NICK");
+			String enrolldate = rs.getString("ENROLL_DATE");
+			
+			BoosterReviewVo brv = new BoosterReviewVo(no, title, content, null, nick, enrolldate, null);
+			arr.add(brv);
 		}
+		
+		if(found = false) {
+			System.out.println("리뷰 조회 실패");
+			return;
+		}
+		
+		 System.out.printf("%-5s | %-15s | %-20s | %-5s | %-20s%n", "번호", "리뷰 제목", "리뷰 내용","작성자", "작성 날짜");
+
+
+		for(BoosterReviewVo brv : arr) {
+			 System.out.printf("%-6s | %-17s | %-23s | %-5s | %-19s%n", brv.getBoosterReviewNo(), brv.getReviewTitle(),brv.getReview(),brv.getMemberNo(), brv.getEnrollDate());
+
+		}
+	}
 	}
 }

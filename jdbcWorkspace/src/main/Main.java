@@ -33,13 +33,13 @@ public class Main {
 			System.out.println("1. MEMBER");
 			System.out.println("2. FOOD PRODUCT");
 			System.out.println("3. FOOD REVIEW");
-			System.out.println("4. 자유게시판");
-			System.out.println("5. 공지사항 게시판");
+			System.out.println("4. BOARD ");
+			System.out.println("5. ANNOUNCEMENT");
 			System.out.println("6. NORMAL PROD");
 			System.out.println("7. NORMAL REVIEW");
 			System.out.println("8. BOOSTER PRODUCT");
 			System.out.println("9. BOOSTER REVIEW");
-			System.out.println("0. 종료하기");
+			System.out.println("0. CLOSE");
 
 			System.out.print("메뉴번호: ");
 			String menu = Main.SC.nextLine();

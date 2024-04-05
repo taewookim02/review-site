@@ -66,7 +66,7 @@ public void lookUpRecent() throws Exception{
 		return;
 	}
 	
-	TablePrinter.printTable( arr , new String[] {"foodProdNo", "foodProdName", "price", "isDidcount", "description"}, 
+	TablePrinter.printRecordsVertically( arr , new String[] {"foodProdNo", "foodProdName", "price", "isDidcount", "description"}, 
 			new String [] {"번호", "상품명", "가격", "단종 여부", "제품 설명"});
 	
 }
@@ -104,7 +104,7 @@ public void lookUpName() throws Exception{
 		System.out.println("리뷰 조회 실패");
 		return;
 	}
-	TablePrinter.printTable( arr , new String[] {"foodProdNo", "foodProdName", "price", "isDidcount", "description"}, 
+	TablePrinter.printRecordsVertically( arr , new String[] {"foodProdNo", "foodProdName", "price", "isDidcount", "description"}, 
 			new String [] {"번호", "상품명", "가격", "단종 여부", "제품 설명"});
 	
 	

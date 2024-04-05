@@ -71,7 +71,7 @@ public class NormalProdController {
 			return;
 		}
 		
-		TablePrinter.printTable( arr , new String[] {"normaProdlNo", "normalProdName", "price", "isDiscount", "description"}, 
+		TablePrinter.printRecordsVertically( arr , new String[] {"normaProdlNo", "normalProdName", "price", "isDiscount", "description"}, 
 				new String [] {"번호", "상품명", "가격", "단종 여부", "제품 설명"});
 		
 		
@@ -109,7 +109,7 @@ public class NormalProdController {
 			System.out.println("상품 조회 실패");
 			return;
 		}
-		TablePrinter.printTable( volist , new String[] {"normaProdlNo", "normalProdName", "price", "isDiscount", "description"}, 
+		TablePrinter.printRecordsVertically( volist , new String[] {"normaProdlNo", "normalProdName", "price", "isDiscount", "description"}, 
 				new String [] {"번호", "상품명", "가격", "단종 여부", "제품 설명"});
 		
 		System.out.print("상품에 대해 리뷰를 작성하시겠습니까? Y/N");

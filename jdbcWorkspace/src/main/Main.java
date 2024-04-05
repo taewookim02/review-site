@@ -2,13 +2,12 @@ package main;
 
 import java.util.Scanner;
 
-
-import foodprod.FoodProdController;
-import foodreview.FoodReviewController;
 import AnnouncementBoard.AnnouncementBoard;
 import board.BoardController;
+import boosterReview.BoosterReviewController;
 import boosterproduct.BoosterProductController;
-
+import foodprod.FoodProdController;
+import foodreview.FoodReviewController;
 import member.MemberController;
 import member.MemberVo;
 import normalProd.NormalProdController;
@@ -24,21 +23,23 @@ public class Main {
 		FoodReviewController frp = new FoodReviewController();
 		NormalProdController nc = new NormalProdController();
 		NormalReviewController nrc = new NormalReviewController();
-		BoardController bc = new BoardController();
 		BoosterProductController bpc = new BoosterProductController();
+		BoosterReviewController brc = new BoosterReviewController();
 		AnnouncementBoard ab = new AnnouncementBoard();
-		
+		BoardController bc = new BoardController();
+
 		while (true) {
 			System.out.println("====MENU====");
 			System.out.println("1. MEMBER");
-			System.out.println("2. food product");
-			System.out.println("3. food review");
+			System.out.println("2. FOOD PRODUCT");
+			System.out.println("3. FOOD REVIEW");
 			System.out.println("4. 자유게시판");
 			System.out.println("5. 공지사항 게시판");
-			System.out.println("6. BOOSTER");
-			System.out.println("7. normal prod");
-			System.out.println("8. normal review");
-			System.out.println("9. 종료하기");
+			System.out.println("6. NORMAL PROD");
+			System.out.println("7. NORMAL REVIEW");
+			System.out.println("8. BOOSTER PRODUCT");
+			System.out.println("9. BOOSTER REVIEW");
+			System.out.println("0. 종료하기");
 
 			System.out.print("메뉴번호: ");
 			String menu = Main.SC.nextLine();
@@ -54,22 +55,23 @@ public class Main {
 				frp.printMenu();
 				break;
 			case "4":
-				bc.printBoardMenu();
+				bc.printBoardMenu(); // D
 				break;
 			case "5":
-				ab.printMenu();
+				ab.printMenu(); // D
 				break;
 			case "6":
-				bpc.printMenu();
-				break;
-			case "7":
 				nc.printMenu();
 				break;
-			case "8":
+			case "7":
 				nrc.printMenu();
+			case "8":
+				bpc.printMenu();
 				break;
-
 			case "9":
+				brc.printMenu();
+				break;
+			case "0":
 				System.out.println("프로그램 종료");
 				return;
 

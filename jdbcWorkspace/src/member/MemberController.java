@@ -256,6 +256,8 @@ public class MemberController {
 
 			TablePrinter.printTable(voList, new String[] { "no", "id", "nick", "join_date" },
 					new String[] { "No", "ID", "Nickname", "Join Date" });
+//			TablePrinter.printRecordsVertically(voList, new String[] { "no", "id", "nick", "join_date" },
+//					new String[] { "No", "ID", "Nickname", "Join Date" });
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

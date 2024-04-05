@@ -61,4 +61,32 @@ public class TablePrinter {
             System.out.printf(format + "%n", (Object[]) row);
         }
     }
+    
+    public static <T> void printRecordsVertically(List<T> objects, String[] fieldNames, String[] columnNames) {
+        if (objects == null || objects.isEmpty() || fieldNames == null || fieldNames.length == 0
+            || columnNames == null || columnNames.length != fieldNames.length) {
+            System.out.println("Invalid data or configuration for vertical display.");
+            return;
+        }
+
+        for (T obj : objects) {
+            System.out.println("---------------------------------------------------");
+            for (int i = 0; i < fieldNames.length; i++) {
+                String fieldName = columnNames[i]; // Use the user-friendly column name
+                String fieldValue = NO_DATA;
+                try {
+                    Field field = obj.getClass().getDeclaredField(fieldNames[i]);
+                    field.setAccessible(true);
+                    Object value = field.get(obj);
+                    fieldValue = value != null ? value.toString() : NO_DATA;
+                } catch (NoSuchFieldException | IllegalAccessException e) {
+                    System.out.println(fieldName + ": " + NO_DATA);
+                    continue;
+                }
+                System.out.println(fieldName + ": " + fieldValue);
+            }
+//            System.out.println("===================================================");
+        }
+    }
+
 }

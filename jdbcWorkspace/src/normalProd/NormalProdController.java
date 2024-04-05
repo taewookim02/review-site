@@ -78,6 +78,7 @@ public class NormalProdController {
 
 		}
 		
+		
 	}
 
 	public void lookUpName() throws Exception {
@@ -119,6 +120,43 @@ public class NormalProdController {
 			System.out.printf("%-6s | %-15s | %-10s | %-8s | %-20s%n", vo.getNormaProdlNo(), vo.getNormalProdName(),
 					vo.getPrice(), vo.getIsDiscount(), vo.getDescription());
 		}
+		System.out.print("리뷰를 남기겠습니까? (yes or no) : ");
+		String yon = Main.SC.nextLine();
+		
+		if(yon.equals("yes")) {
+			if(Main.loginMember == null) {
+				System.out.println("로그인이 필요 합니다");
+				return;
+			}
+			
+			Connection conn1 = JDBCTemplate.getConn();
+
+			String sql1 = "INSERT INTO NORMAL_REVIEW(NORMAL_REVIEW_NO, REVIEW_TITLE, REVIEW, NORMAL_PROD_NO, WRITER_NO, ENROLL_DATE) VALUES(SEQ_FOOD_REVIEW_NO.NEXTVAL,?,?,?,?,SYSDATE)";
+			System.out.println("리뷰 제목 : ");
+			String title = Main.SC.nextLine();
+			System.out.println("리뷰 내용 : ");
+			String content = Main.SC.nextLine();
+			System.out.println("재품 번호 (oniy number) : ");
+			String prodName = Main.SC.nextLine();
+			
+
+			PreparedStatement pstmt1 = conn.prepareStatement(sql1);
+			pstmt1.setString(1, title);
+			pstmt1.setString(2, content);
+			pstmt1.setString(3, prodName);
+			pstmt1.setString(4, Main.loginMember.getNo());
+
+			int result = pstmt1.executeUpdate();
+
+			if (result != 1) {
+				System.out.println("리뷰 작성 실패");
+				return;
+			}
+			System.out.println("리뷰 등록 완료");
+
+		} else if(yon.equals("no")) {
+			return;
+		} 
 
 	}
 

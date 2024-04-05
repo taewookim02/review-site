@@ -342,7 +342,7 @@ public class BoardController {
 
 		Connection conn = JDBCTemplate.getConn();
 
-		String sql = "SELECT B.NO, B.TITLE, B.WRITER_NO, B.ENROLL_DATE FROM BOARD B JOIN MEMBER M ON M.NO = B.WRITER_NO WHERE M.NICK = ? AND DEL_YN = 'N'";
+		String sql = "SELECT B.NO, B.TITLE, B.WRITER_NO, B.ENROLL_DATE FROM BOARD B JOIN MEMBER M ON M.NO = B.WRITER_NO WHERE M.NICK LIKE '%' || ? || '%' AND DEL_YN = 'N'";
 
 		System.out.print("찾을 작성자 닉네임 : ");
 		String nick = Main.SC.nextLine();

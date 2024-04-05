@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import main.Main;
 import util.JDBCTemplate;
+import util.TablePrinter;
 
 public class MemberController {
 	public void printMenu() {
@@ -297,10 +298,11 @@ public class MemberController {
 				System.out.println("=============");
 				return;
 			}
-
-			for (MemberVo reVo : voList) {
-				System.out.println(reVo);
-			}
+			StringBuilder sb = new StringBuilder();
+			sb.append("ㅎㅇ");
+			TablePrinter.printTable(voList, new String[] {"no", "id", "pwd", "nick", "modify_date", "quit_yn"});
+//			TablePrinter.printTable(voList, new String[] {"no", "id", "pwd", "nick", "modify_date", "quit_yn"},
+//					new String[] {"No", "Id", "비밀번호", "닉네임", "수정날짜", "탈퇴여부"});
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

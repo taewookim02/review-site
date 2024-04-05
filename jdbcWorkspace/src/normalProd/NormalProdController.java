@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import main.Main;
 import util.JDBCTemplate;
+import util.TablePrinter;
 
 public class NormalProdController {
 
@@ -66,17 +67,12 @@ public class NormalProdController {
 		}
 		
 		if(found = false) {
-			System.out.println("게시물 조회 실패");
+			System.out.println("상품 조회 실패");
 			return;
 		}
 		
-		 System.out.printf("%-5s | %-15s | %-10s | %-5s | %-20s%n", "번호", "제품 이름", "가격", "단종 여부", "제품 설명");
-
-
-		for(NormalProdVo npv : arr) {
-			 System.out.printf("%-6s | %-15s | %-10s | %-8s | %-20s%n", npv.getNormaProdlNo(), npv.getNormalProdName(), npv.getPrice(), npv.getIsDiscount(), npv.getDescription());
-
-		}
+		TablePrinter.printTable( arr , new String[] {"normaProdlNo", "normalProdName", "price", "isDiscount", "description"}, 
+				new String [] {"번호", "상품명", "가격", "단종 여부", "제품 설명"});
 		
 		
 	}
@@ -110,20 +106,16 @@ public class NormalProdController {
 
 		}
 		if (found = false) {
-			System.out.println("게시물 조회 실패");
+			System.out.println("상품 조회 실패");
 			return;
 		}
-
-		System.out.printf("%-5s | %-15s | %-10s | %-5s | %-20s%n", "번호", "제품 이름", "가격", "단종 여부", "제품 설명");
-
-		for (NormalProdVo vo : volist) {
-			System.out.printf("%-6s | %-15s | %-10s | %-8s | %-20s%n", vo.getNormaProdlNo(), vo.getNormalProdName(),
-					vo.getPrice(), vo.getIsDiscount(), vo.getDescription());
-		}
-		System.out.print("리뷰를 남기겠습니까? (yes or no) : ");
+		TablePrinter.printTable( volist , new String[] {"normaProdlNo", "normalProdName", "price", "isDiscount", "description"}, 
+				new String [] {"번호", "상품명", "가격", "단종 여부", "제품 설명"});
+		
+		System.out.print("상품에 대해 리뷰를 작성하시겠습니까? Y/N");
 		String yon = Main.SC.nextLine();
 		
-		if(yon.equals("yes")) {
+		if(yon.equals("Y")) {
 			if(Main.loginMember == null) {
 				System.out.println("로그인이 필요 합니다");
 				return;
@@ -154,7 +146,7 @@ public class NormalProdController {
 			}
 			System.out.println("리뷰 등록 완료");
 
-		} else if(yon.equals("no")) {
+		} else if(yon.equals("N")) {
 			return;
 		} 
 
@@ -188,11 +180,11 @@ public class NormalProdController {
 		int result = pstmt.executeUpdate();
 
 		if (result != 1) {
-			System.out.println("상품등록 실패하셨습니다");
+			System.out.println("상품 등록 실패하셨습니다");
 			return;
 		}
 
-		System.out.println("상품등록 성공하셨습니다");
+		System.out.println("상품 등록 성공하셨습니다");
 
 	}
 }

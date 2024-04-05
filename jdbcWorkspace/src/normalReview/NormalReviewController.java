@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import foodreview.FoodReviewVo;
 import main.Main;
 import util.JDBCTemplate;
+import util.TablePrinter;
 
 public class NormalReviewController {
 
@@ -39,7 +40,7 @@ public class NormalReviewController {
 	
 	public void write() throws Exception {
 		if (Main.loginMember == null) {
-			System.out.println("로그인 필요");
+			System.out.println("로그인이 필요 합니다");
 			return;
 		}
 
@@ -72,7 +73,7 @@ public class NormalReviewController {
 	public void delete() throws Exception {
 
 		if (Main.loginMember == null) {
-			System.out.println("로그인 필요");
+			System.out.println("로그인이 필요 합니다");
 			return;
 		}
 
@@ -81,7 +82,7 @@ public class NormalReviewController {
 			Connection conn = JDBCTemplate.getConn();
 
 			String sql = "UPDATE NORMAL_REVIEW SET QUIT_YN = 'Y' WHERE NORMAL_REVIEW_NO = ? AND WRITER_NO = ?";
-			System.out.println("삭제할 게시물 번호 : ");
+			System.out.println("삭제할 리뷰 번호 : ");
 			String num = Main.SC.nextLine();
 
 			PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -100,7 +101,7 @@ public class NormalReviewController {
 			Connection conn = JDBCTemplate.getConn();
 
 			String sql = "DELETE NORMAL_REVIEW WHERE NORMAL_REVIEW_NO =?";
-			System.out.println("삭제할 게시물 번호 : ");
+			System.out.println("삭제할 리뷰 번호 : ");
 			String num = Main.SC.nextLine();
 
 			PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -118,7 +119,7 @@ public class NormalReviewController {
 
 	public void editTitle() throws Exception {
 		if (Main.loginMember == null) {
-			System.out.println("로그인 필요");
+			System.out.println("로그인이 필요 합니다");
 			return;
 		}
 //		System.out.println(Main.loginMember.getNo()); // 2
@@ -126,9 +127,9 @@ public class NormalReviewController {
 
 		String sql = "UPDATE NORMAL_REVIEW SET REVIEW_TITLE = ? WHERE NORMAL_REVIEW_NO = ? AND WRITER_NO = ?";
 
-		System.out.println("수정 할 리뷰 번호 : ");
+		System.out.println("제목 수정할 리뷰 번호 : ");
 		String num = Main.SC.nextLine();
-		System.out.println("수정 할 리뷰 제목 : ");
+		System.out.println("수정할 리뷰 제목 : ");
 		String title = Main.SC.nextLine();
 
 		PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -149,16 +150,16 @@ public class NormalReviewController {
 	public void editContent() throws Exception {
 		
 		if (Main.loginMember == null) {
-			System.out.println("로그인 필요");
+			System.out.println("로그인이 필요 합니다");
 			return;
 		}
 		Connection conn = JDBCTemplate.getConn();
 
 		String sql = "UPDATE NORMAL_REVIEW SET REVIEW = ? WHERE NORMAL_REVIEW_NO = ? AND WRITER_NO = ?";
 
-		System.out.println("수정 할 리뷰 번호 : ");
+		System.out.println("내용 수정할 리뷰 번호 : ");
 		String num = Main.SC.nextLine();
-		System.out.println("수정 할 리뷰 내용 : ");
+		System.out.println("수정할 리뷰 내용 : ");
 		String content = Main.SC.nextLine();
 
 		PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -206,13 +207,8 @@ public class NormalReviewController {
 				return;
 			}
 			
-			System.out.printf("%-5s | %-15s | %-5s | %-20s%n", "번호", "리뷰 제목", "작성자", "작성 날짜");
-			
-			
-			for(NormalReviewVo nrv1 : arr1) {
-				System.out.printf("%-6s | %-17s | %-5s | %-19s%n", nrv1.getNormalReviewlNo(), nrv1.getNormalReviewTilte(), nrv1.getWriterNo(), nrv1.getEnrollDate());
-				
-			}
+			TablePrinter.printTable( arr1 , new String[] {"normalReviewlNo", "normalReviewTilte", "writerNo", "enrollDate"}, 
+					new String [] {"번호", "리뷰 제목", "작성자", "작성 시간"});
 		}else {
 		Connection conn = JDBCTemplate.getConn();
 		
@@ -240,13 +236,8 @@ public class NormalReviewController {
 				return;
 			}
 			
-			 System.out.printf("%-5s | %-15s | %-5s | %-20s%n", "번호", "리뷰 제목", "작성자", "작성 날짜");
-
-
-			for(NormalReviewVo nrv : arr) {
-				 System.out.printf("%-6s | %-17s | %-5s | %-19s%n", nrv.getNormalReviewlNo(), nrv.getNormalReviewTilte(), nrv.getWriterNo(), nrv.getEnrollDate());
-
-			}
+			TablePrinter.printTable( arr , new String[] {"normalReviewlNo", "normalReviewTilte", "writerNo", "enrollDate"}, 
+					new String [] {"번호", "리뷰 제목", "작성자", "작성 시간"});
 				
 			}  
 		
@@ -260,7 +251,7 @@ public class NormalReviewController {
 			Connection conn1 = JDBCTemplate.getConn();
 			
 			String sql1 = "SELECT R.NORMAL_REVIEW_NO, R.REVIEW_TITLE, R.REVIEW,M.NICK ,TO_CHAR(R.ENROLL_DATE, 'YYYY-MM-DD HH:MI:SS') AS ENROLL_DATE FROM NORMAL_REVIEW R JOIN MEMBER M ON R.WRITER_NO = M.NO WHERE M.NICK = ?";
-			System.out.println("찾을 작성자 닉네임 : ");
+			System.out.println("찾을 리뷰 작성자 닉네임 : ");
 			String name1 = Main.SC.nextLine();
 			
 			PreparedStatement pstmt1 = conn1.prepareStatement(sql1);
@@ -287,18 +278,13 @@ public class NormalReviewController {
 				return;
 			}
 			
-			System.out.printf("%-5s | %-15s | %-20s | %-5s | %-20s%n", "번호", "리뷰 제목","리뷰 내용" ,"작성자", "작성 날짜");
-			
-			
-			for(NormalReviewVo nrv1 : arr1) {
-				System.out.printf("%-6s | %-17s | %-23s| %-5s | %-19s%n", nrv1.getNormalReviewlNo(), nrv1.getNormalReviewTilte(),nrv1.getNormalReview() ,nrv1.getWriterNo(), nrv1.getEnrollDate());
-				
-			}
+			TablePrinter.printTable( arr1 , new String[] {"normalReviewlNo", "normalReviewTilte", "normalReview","writerNo", "enrollDate"}, 
+					new String [] {"번호", "리뷰 제목","리뷰 내용" ,"작성자", "작성 시간"});
 		}else {
 		Connection conn = JDBCTemplate.getConn();
 		
 		String sql = "SELECT R.NORMAL_REVIEW_NO, R.REVIEW_TITLE, R.REVIEW ,M.NICK ,TO_CHAR(R.ENROLL_DATE, 'YYYY-MM-DD HH:MI:SS') AS ENROLL_DATE FROM NORMAL_REVIEW R JOIN MEMBER M ON R.WRITER_NO = M.NO WHERE R.QUIT_YN = 'N'AND M.NICK = ?";
-		System.out.println("찾을 작성자 닉네임 : ");
+		System.out.println("찾을 리뷰 작성자 닉네임 : ");
 		String name = Main.SC.nextLine();
 		
 		PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -325,13 +311,8 @@ public class NormalReviewController {
 			return;
 		}
 		
-		 System.out.printf("%-5s | %-15s | %-20s | %-5s | %-20s%n", "번호", "리뷰 제목", "리뷰 내용","작성자", "작성 날짜");
-
-
-		for(NormalReviewVo nrv : arr) {
-			 System.out.printf("%-6s | %-17s | %-23s | %-5s | %-19s%n", nrv.getNormalReviewlNo(), nrv.getNormalReviewTilte(),nrv. getNormalReview(),nrv.getWriterNo(), nrv.getEnrollDate());
-
-		}
+		TablePrinter.printTable( arr , new String[] {"normalReviewlNo", "normalReviewTilte","normalReview" ,"writerNo", "enrollDate"}, 
+				new String [] {"번호", "리뷰 제목","리뷰 내용" ,"작성자", "작성 시간"});
 	}
 	}
 	

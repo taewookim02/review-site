@@ -424,12 +424,12 @@ public class BoosterReviewController {
 		}else {
 		Connection conn = JDBCTemplate.getConn();
 		
-		String sql = "SELECT R.BOOSTER_REVIEW_NO, R.REVIEW_TITLE, R.REVIEW ,M.NICK ,TO_CHAR(R.ENROLL_DATE, 'YYYY-MM-DD HH:MI:SS') AS ENROLL_DATE FROM BOOSTER_REVIEW R JOIN MEMBER M ON R.MEMBER_NO = M.NO WHERE R.QUIT_YN = 'N'AND M.NICK = ?";
+		String sql = "SELECT R.BOOSTER_REVIEW_NO, R.REVIEW_TITLE, R.REVIEW ,M.NICK ,TO_CHAR(R.ENROLL_DATE, 'YYYY-MM-DD HH:MI:SS') AS ENROLL_DATE FROM BOOSTER_REVIEW R JOIN MEMBER M ON R.MEMBER_NO = M.NO WHERE R.QUIT_YN = 'N'AND M.NICK LIKE ?";
 		System.out.println("찾을 작성자 닉네임 : ");
 		String name = Main.SC.nextLine();
 		
 		PreparedStatement pstmt = conn.prepareStatement(sql);
-		pstmt.setString(1, name);
+		pstmt.setString(1,"%" + name + "%");
 		
 		ResultSet rs = pstmt.executeQuery();
 		

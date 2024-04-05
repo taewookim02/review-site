@@ -250,12 +250,12 @@ public class NormalReviewController {
 			
 			Connection conn1 = JDBCTemplate.getConn();
 			
-			String sql1 = "SELECT R.NORMAL_REVIEW_NO, R.REVIEW_TITLE, R.REVIEW,M.NICK ,TO_CHAR(R.ENROLL_DATE, 'YYYY-MM-DD HH:MI:SS') AS ENROLL_DATE FROM NORMAL_REVIEW R JOIN MEMBER M ON R.WRITER_NO = M.NO WHERE M.NICK = ?";
+			String sql1 = "SELECT R.NORMAL_REVIEW_NO, R.REVIEW_TITLE, R.REVIEW,M.NICK ,TO_CHAR(R.ENROLL_DATE, 'YYYY-MM-DD HH:MI:SS') AS ENROLL_DATE FROM NORMAL_REVIEW R JOIN MEMBER M ON R.WRITER_NO = M.NO WHERE M.NICK LIKE ?";
 			System.out.println("찾을 리뷰 작성자 닉네임 : ");
 			String name1 = Main.SC.nextLine();
 			
 			PreparedStatement pstmt1 = conn1.prepareStatement(sql1);
-			pstmt1.setString(1, name1);
+			pstmt1.setString(1, "%" + name1 + "%");
 			
 			ResultSet rs1 = pstmt1.executeQuery();
 			
@@ -283,12 +283,12 @@ public class NormalReviewController {
 		}else {
 		Connection conn = JDBCTemplate.getConn();
 		
-		String sql = "SELECT R.NORMAL_REVIEW_NO, R.REVIEW_TITLE, R.REVIEW ,M.NICK ,TO_CHAR(R.ENROLL_DATE, 'YYYY-MM-DD HH:MI:SS') AS ENROLL_DATE FROM NORMAL_REVIEW R JOIN MEMBER M ON R.WRITER_NO = M.NO WHERE R.QUIT_YN = 'N'AND M.NICK = ?";
+		String sql = "SELECT R.NORMAL_REVIEW_NO, R.REVIEW_TITLE, R.REVIEW ,M.NICK ,TO_CHAR(R.ENROLL_DATE, 'YYYY-MM-DD HH:MI:SS') AS ENROLL_DATE FROM NORMAL_REVIEW R JOIN MEMBER M ON R.WRITER_NO = M.NO WHERE R.QUIT_YN = 'N'AND M.NICK LIKE ?";
 		System.out.println("찾을 리뷰 작성자 닉네임 : ");
 		String name = Main.SC.nextLine();
 		
 		PreparedStatement pstmt = conn.prepareStatement(sql);
-		pstmt.setString(1, name);
+		pstmt.setString(1, "%" + name + "%");
 		
 		ResultSet rs = pstmt.executeQuery();
 		

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import main.Main;
 import util.JDBCTemplate;
+import util.TablePrinter;
 
 public class MemberController {
 	public void printMenu() {
@@ -67,8 +68,10 @@ public class MemberController {
 		System.out.println("1. 로그아웃");
 		System.out.println("2. 비밀번호 변경");
 		System.out.println("3. 닉네임 변경");
-		System.out.println("4. 회원 전체 목록");
-		System.out.println("5. 회원 상세 조회");
+		System.out.println("4. 활동중인 회원 목록");
+		System.out.println("5. 탈퇴한 회원 목록");
+		System.out.println("6. 회원 상세 조회");
+		System.out.println("7. 회원 탈퇴시키기");
 		System.out.println("9. 이전 메뉴로 돌아가기");
 
 		System.out.print("메뉴 번호: ");
@@ -87,12 +90,20 @@ public class MemberController {
 			changeNick();
 			break;
 		case "4":
-			// 회원 전체 목록 조회 (관리자 전용)
+			// 활동중인 회원 목록 (관리자 전용)
 			selectAllMembers();
 			break;
 		case "5":
+			// 탈퇴한 회원 목록 (관리자 전용)
+			selectQuitMembers();
+			break;
+		case "6":
 			// 회원 상세 조회 (관리자 전용)
 			selectOneMember();
+			break;
+		case "7":
+			// 회원 탈퇴시키기 (관리자 전용)
+			banMember();
 			break;
 		case "9":
 			System.out.println("=============");
@@ -104,6 +115,31 @@ public class MemberController {
 			System.out.println("잘못 입력하셨습니다.");
 			break;
 		}
+	}
+
+	private void banMember() {
+		try {
+			Connection conn = JDBCTemplate.getConn();
+			String sql = "UPDATE MEMBER SET QUIT_YN = 'Y' WHERE NO = ?";
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			
+			System.out.print("탈퇴시킬 회원번호: ");
+			String inputNo = Main.SC.nextLine();
+			pstmt.setString(1, inputNo );
+			
+			int r = pstmt.executeUpdate();
+			
+			if (r != 1) {
+				System.out.println("탈퇴과정 실패");
+				return;
+			}
+			
+			System.out.println("탈퇴과정 성공!");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 	private void printGuestMenu() {
@@ -185,7 +221,7 @@ public class MemberController {
 	private void selectAllMembers() {
 		try {
 			Connection conn = JDBCTemplate.getConn();
-			String sql = "SELECT * FROM MEMBER ORDER BY NO ASC";
+			String sql = "SELECT * FROM MEMBER WHERE QUIT_YN = 'N' ORDER BY NO ASC";
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 
 			ResultSet rs = pstmt.executeQuery();
@@ -226,6 +262,47 @@ public class MemberController {
 			}
 			System.out.println("-".repeat(99));
 
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	private void selectQuitMembers() {
+		try {
+			Connection conn = JDBCTemplate.getConn();
+			String sql = "SELECT * FROM MEMBER WHERE QUIT_YN = 'Y'";
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+
+			ResultSet rs = pstmt.executeQuery();
+			ArrayList<MemberVo> voList = new ArrayList<>();
+
+			while (rs.next()) {
+				String no = rs.getString("NO");
+				String id = rs.getString("ID");
+				String pwd = rs.getString("PWD");
+				String nick = rs.getString("NICK");
+				String joinDate = rs.getString("JOIN_DATE");
+				String modifydate = rs.getString("MODIFY_DATE");
+				String quitYn = rs.getString("QUIT_YN");
+				String adminYn = rs.getString("ADMIN_YN");
+
+				MemberVo vo = new MemberVo(no, id, pwd, nick, joinDate, modifydate, quitYn, adminYn);
+				voList.add(vo);
+			}
+
+			if (voList.isEmpty()) {
+				System.out.println("=============");
+				System.out.println("탈퇴한 회원이 없습니다.");
+				System.out.println("=============");
+				return;
+			}
+			StringBuilder sb = new StringBuilder();
+			sb.append("ㅎㅇ");
+			TablePrinter.printTable(voList, new String[] {"no", "id", "pwd", "nick", "modify_date", "quit_yn"});
+//			TablePrinter.printTable(voList, new String[] {"no", "id", "pwd", "nick", "modify_date", "quit_yn"},
+//					new String[] {"No", "Id", "비밀번호", "닉네임", "수정날짜", "탈퇴여부"});
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

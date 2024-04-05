@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+import boosterReview.BoosterReviewController;
 import main.Main;
 import member.MemberVo;
 import util.JDBCTemplate;
@@ -64,6 +65,8 @@ public class BoosterProductController {
 				System.out.printf(" 제품설명 : " + vo.getDescription());
 				System.out.println("----------------------------");
 			}
+			
+	
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -99,9 +102,40 @@ public class BoosterProductController {
 				vo.setDescription(description);
 
 				System.out.println(vo.getBoosterProdNo() + " | " + vo.getName() + " | " + vo.getPrice());
-			}
+				}
+			
+			System.out.println("상품에 대해 리뷰를 작성하시겠습니까? Y/N");
+			String reviewYn = Main.SC.nextLine();
+			if(reviewYn.equals("Y")) {
+				System.out.println("1");
+				if (Main.loginMember == null) {
+					System.out.println("로그인 하고 오세요");
+					return;
+				}
+				
+					System.out.println("리뷰할 제품 번호 : ");
+					String no = Main.SC.nextLine();
+					System.out.println("리뷰 제목 : ");
+					String reviewTitle = Main.SC.nextLine();
+					System.out.println("리뷰 내용 : ");
+					String review = Main.SC.nextLine();
+
+					String sql2 = "INSERT INTO BOOSTER_REVIEW (BOOSTER_REVIEW_NO, REVIEW_TITLE, REVIEW, BOOSTER_PROD_NO, MEMBER_NO) VALUES (SEQ_BOOSTER_REVIEW_NO.NEXTVAL, ?, ?, ?, ?)";
+					PreparedStatement pstmt2 = conn.prepareStatement(sql2);
+					pstmt2.setString(1, reviewTitle);
+					pstmt2.setString(2, review);
+					pstmt2.setString(3, no);
+					pstmt2.setString(4, Main.loginMember.getNo());
+					int result = pstmt2.executeUpdate();
+
+					if (result != 1) {
+						System.out.println("게시글 작성 실패 ... ");
+						return;
+					}
+					System.out.println("게시글 작성 성공 ! ");
+				}
+			
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -135,7 +169,6 @@ public class BoosterProductController {
 			System.out.println("등록 성공 ! ");
 
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

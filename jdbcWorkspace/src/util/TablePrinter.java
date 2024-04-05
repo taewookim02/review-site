@@ -18,7 +18,7 @@ public class TablePrinter {
     public static <T> void printTable(List<T> objects, String[] fieldNames, String[] columnNames) {
         if (objects == null || objects.isEmpty() || fieldNames == null || fieldNames.length == 0
             || columnNames == null || columnNames.length != fieldNames.length) {
-            System.out.println("Invalid data or configuration.");
+            System.out.println("출력할 데이터가 없습니다");
             return;
         }
 
@@ -65,7 +65,7 @@ public class TablePrinter {
     public static <T> void printRecordsVertically(List<T> objects, String[] fieldNames, String[] columnNames) {
         if (objects == null || objects.isEmpty() || fieldNames == null || fieldNames.length == 0
             || columnNames == null || columnNames.length != fieldNames.length) {
-            System.out.println("Invalid data or configuration for vertical display.");
+            System.out.println("출력할 데이터가 없습니다");
             return;
         }
 

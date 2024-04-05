@@ -85,8 +85,8 @@ public class TablePrinter {
                 }
                 System.out.println(fieldName + ": " + fieldValue);
             }
-//            System.out.println("===================================================");
         }
+        System.out.println("---------------------------------------------------");
     }
 
 }

@@ -208,7 +208,7 @@ public class FoodReviewController {
 				return;
 			}
 			
-			TablePrinter.printTable( arr1 , new String[] {"foodReviewNo", "reviewTitle", "writerNo", "enrollDate"}, 
+			TablePrinter.printRecordsVertically( arr1 , new String[] {"foodReviewNo", "reviewTitle", "writerNo", "enrollDate"}, 
 					new String [] {"번호", "리뷰 제목", "작성자", "작성 시간"});
 			
 			}else {
@@ -239,7 +239,7 @@ public class FoodReviewController {
 			}
 			
 
-			TablePrinter.printTable( arr , new String[] {"foodReviewNo", "reviewTitle", "writerNo", "enrollDate"}, 
+			TablePrinter.printRecordsVertically( arr , new String[] {"foodReviewNo", "reviewTitle", "writerNo", "enrollDate"}, 
 					new String [] {"번호", "리뷰 제목", "작성자", "작성 시간"});
 			}
 		
@@ -280,7 +280,7 @@ public class FoodReviewController {
 				return;
 			}
 			
-			TablePrinter.printTable( arr1 , new String[] {"foodReviewNo", "reviewTitle","review" ,"foodProdNo", "enrollDate"}, 
+			TablePrinter.printRecordsVertically( arr1 , new String[] {"foodReviewNo", "reviewTitle","review" ,"foodProdNo", "enrollDate"}, 
 					new String [] {"번호", "리뷰 제목","리뷰 내용" ,"제품명", "작성 시간"});
 		}else {
 		Connection conn = JDBCTemplate.getConn();
@@ -313,7 +313,7 @@ public class FoodReviewController {
 			return;
 		}
 		
-		TablePrinter.printTable( arr , new String[] {"foodReviewNo", "reviewTitle","review" ,"writerNo", "enrollDate"}, 
+		TablePrinter.printRecordsVertically( arr , new String[] {"foodReviewNo", "reviewTitle","review" ,"writerNo", "enrollDate"}, 
 				new String [] {"번호", "리뷰 제목","리뷰 내용" ,"작성자", "작성 시간"});
 	}
 	}

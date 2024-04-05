@@ -332,7 +332,7 @@ public class BoardController {
 		}
 
 
-		TablePrinter.printTable(voList, new String[] { "no", "title","writerNo", "enrollDate" },
+		TablePrinter.printRecordsVertically(voList, new String[] { "no", "title","writerNo", "enrollDate" },
 				new String[] { "번호", "제목", "작성자", "생성일자" });
 		
 
@@ -374,7 +374,7 @@ public class BoardController {
 			System.out.println("정확하게 입력 바람.");
 			System.out.println("==================");
 		} else {
-			TablePrinter.printTable(voList, new String[] { "no", "writerNo", "title", "enrollDate" },
+			TablePrinter.printRecordsVertically(voList, new String[] { "no", "writerNo", "title", "enrollDate" },
 					new String[] { "번호", "작성자 번호", "제목", "생성일자" });
 		}
 
@@ -415,7 +415,7 @@ public class BoardController {
 			System.out.println("=====================");
 		} else {
 
-			TablePrinter.printTable(voList, new String[] { "no", "title", "enrollDate" },
+			TablePrinter.printRecordsVertically(voList, new String[] { "no", "title", "enrollDate" },
 					new String[] { "번호", "제목", "작성일자" });
 
 		}

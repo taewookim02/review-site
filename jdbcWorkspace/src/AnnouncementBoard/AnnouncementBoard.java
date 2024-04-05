@@ -226,7 +226,7 @@ public class AnnouncementBoard {
 			voList.add(Vo);
 		}
 
-		TablePrinter.printTable(voList, new String[] { "no", "title", "enrollDate" },
+		TablePrinter.printRecordsVertically(voList, new String[] { "no", "title", "enrollDate" },
 				new String[] { "번호", "제목", "생성일자" });
 
 	}
@@ -262,7 +262,7 @@ public class AnnouncementBoard {
 
 			voList.add(vo);
 
-			TablePrinter.printTable(voList, new String[] { "no", "title", "content", "writerNo", "enrollDate" },
+			TablePrinter.printRecordsVertically(voList, new String[] { "no", "title", "content", "writerNo", "enrollDate" },
 					new String[] { "번호", "제목", "내용", "작성자", "생성일자" });
 
 		} else if (vo == null) {
@@ -304,7 +304,7 @@ public class AnnouncementBoard {
 			System.out.println("날짜 재확인 바람.");
 			System.out.println("=======================");
 		} else {
-			TablePrinter.printTable(voList, new String[] { "no", "title", "content", "enrollDate" },
+			TablePrinter.printRecordsVertically(voList, new String[] { "no", "title", "content", "enrollDate" },
 					new String[] { "번호", "제목", "내용", "생성일자" });
 		}
 

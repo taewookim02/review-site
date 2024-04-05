@@ -3,10 +3,9 @@ package boosterproduct;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
-import boosterReview.BoosterReviewController;
 import main.Main;
-import member.MemberVo;
 import util.JDBCTemplate;
 
 public class BoosterProductController {
@@ -43,7 +42,7 @@ public class BoosterProductController {
 			ResultSet rs = pstmt.executeQuery();
 
 			BoosterProductVo vo = null;
-
+			
 			while (rs.next()) {
 				String boosterProdNo = rs.getString("BOOSTER_PROD_NO");
 				String name = rs.getString("NAME");
@@ -57,13 +56,18 @@ public class BoosterProductController {
 				vo.setPrice(price);
 				vo.setIsDiscountinuedYn(isDiscountinuedYn);
 				vo.setDescription(description);
-
-				System.out.println("----------------------------");
-				System.out.printf("제품번호 : " + vo.getBoosterProdNo());
-				System.out.printf(" 제품명 : " + vo.getName());
-				System.out.printf(" 가격 : " + vo.getPrice());
-				System.out.printf(" 제품설명 : " + vo.getDescription());
-				System.out.println("----------------------------");
+				
+//				ArrayList<BoosterProductVo> voList = new ArrayList<>();
+//
+//				TablePrinter.printTable(voList, new String[] {"BOOSTER_PROD_NO", "NAME", "PRICE", "IS_DISCOUNTINUED_YN", "DESCRIPTION"}, new String[] {"제품번호", "제품명", "가격", "알아서", "설명"};
+				
+				
+//				System.out.println("----------------------------");
+//				System.out.printf("제품번호 : " + vo.getBoosterProdNo());
+//				System.out.printf(" 제품명 : " + vo.getName());
+//				System.out.printf(" 가격 : " + vo.getPrice());
+//				System.out.printf(" 제품설명 : " + vo.getDescription());
+//				System.out.println("----------------------------");
 			}
 			
 	

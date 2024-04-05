@@ -379,7 +379,7 @@ public class BoosterReviewController {
 			Connection conn1 = JDBCTemplate.getConn();
 			
 			String sql1 = "SELECT R.BOOSTER_REVIEW_NO, R.REVIEW_TITLE, R.REVIEW,M.NICK ,TO_CHAR(R.ENROLL_DATE, 'YYYY-MM-DD HH:MI:SS') AS ENROLL_DATE FROM BOOSTER_REVIEW R JOIN MEMBER M ON R.MEMBER_NO = M.NO WHERE M.NICK = ?";
-			System.out.println("찾을 작성자 닉네임 : ");
+			System.out.println("찾을 리뷰 작성자 닉네임 : ");
 			String name1 = Main.SC.nextLine();
 			
 			PreparedStatement pstmt1 = conn1.prepareStatement(sql1);

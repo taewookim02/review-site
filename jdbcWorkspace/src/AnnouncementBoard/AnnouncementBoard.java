@@ -8,6 +8,7 @@ import java.util.List;
 
 import main.Main;
 import util.JDBCTemplate;
+import util.TablePrinter;
 
 public class AnnouncementBoard {
 
@@ -18,7 +19,7 @@ public class AnnouncementBoard {
 		System.out.println("2. 공지사항 삭제 (관리자)");
 		System.out.println("3. 공지사항 제목 수정 (관리자)");
 		System.out.println("4. 공지사항 내용 수정 (관리자)");
-		System.out.println("5. 공지사항 전체 조회");
+		System.out.println("5. 공지사항 전체 조회 (최신순)");
 		System.out.println("6. 공지사항 상세조회 (번호)");
 		System.out.println("7. 공지사항 상세조회 (생성일자)");
 		System.out.println("8. 이전으로 돌아가기");
@@ -75,7 +76,7 @@ public class AnnouncementBoard {
 
 			Connection conn = JDBCTemplate.getConn();
 
-			String sql = "INSERT INTO ANNOUNCEMENT_BOARD(NO, TITLE, CONTENT, WRITER_NO) VALUES(SEQ_BOARD_NO.NEXTVAL , ? , ?, '1')";
+			String sql = "INSERT INTO ANNOUNCEMENT_BOARD(NO, TITLE, CONTENT, WRITER_NO) VALUES(SEQ_ANNOUNCEMENT_BOARD_NO.NEXTVAL , ? , ?, '1')";
 
 			System.out.print("제목 : ");
 			String title = Main.SC.nextLine();
@@ -90,7 +91,7 @@ public class AnnouncementBoard {
 
 			if (result != 1) {
 				System.out.println("====================");
-				System.out.println("게시글 등록에 실패하셨습니다.");
+				System.out.println("공지사항 등록 실패.");
 				System.out.println("====================");
 				return;
 			}
@@ -100,7 +101,7 @@ public class AnnouncementBoard {
 
 		} else {
 			System.out.println("====================");
-			System.out.println("일반 회원은 권한이 없습니다.");
+			System.out.println("관리자만 공지사항 작성 가능.");
 			System.out.println("====================");
 			return;
 		}
@@ -114,7 +115,7 @@ public class AnnouncementBoard {
 			Connection conn = JDBCTemplate.getConn();
 
 			String sql = "UPDATE ANNOUNCEMENT_BOARD SET DEL_YN = 'Y' WHERE NO = ? AND DEL_YN = 'N'";
-			System.out.print("삭제할 게시물 번호 : ");
+			System.out.print("삭제할 공지사항 번호 : ");
 			String no = Main.SC.nextLine();
 
 			PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -124,12 +125,12 @@ public class AnnouncementBoard {
 
 			if (result != 1) {
 				System.out.println("====================");
-				System.out.println("공지사항 삭제에 실패했습니다.");
+				System.out.println("공지사항 삭제 실패.");
 				System.out.println("====================");
 				return;
 			}
 			System.out.println("====================");
-			System.out.println("공지사항이 삭제되었습니다.");
+			System.out.println("공지사항 삭제 완료.");
 			System.out.println("====================");
 
 		} else {
@@ -148,9 +149,9 @@ public class AnnouncementBoard {
 			Connection conn = JDBCTemplate.getConn();
 
 			String sql = "UPDATE ANNOUNCEMENT_BOARD SET TITLE = ? WHERE NO = ? AND DEL_YN = 'N'";
-			System.out.print("변경할 게시물 번호 선택 : ");
+			System.out.print("수정할 공지사항 번호 : ");
 			String no = Main.SC.nextLine();
-			System.out.print("변경할 제목 : ");
+			System.out.print("수정할 제목 : ");
 			String title = Main.SC.nextLine();
 
 			PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -161,12 +162,12 @@ public class AnnouncementBoard {
 
 			if (result != 1) {
 				System.out.println("====================");
-				System.out.println("제목 수정에 실패하였습니다.");
+				System.out.println("공지사항 제목 수정 실패.");
 				System.out.println("====================");
 				return;
 			}
 			System.out.println("====================");
-			System.out.println("제목 수정이 완료되었습니다.");
+			System.out.println("공지사항 제목 수정 완료.");
 			System.out.println("====================");
 
 		}
@@ -180,9 +181,9 @@ public class AnnouncementBoard {
 			Connection conn = JDBCTemplate.getConn();
 
 			String sql = "UPDATE ANNOUNCEMENT_BOARD SET CONTENT = ? WHERE NO = ? AND DEL_YN = 'N'";
-			System.out.print("변경할 게시물 번호 선택 : ");
+			System.out.print("수정할 공지사항 번호 : ");
 			String no = Main.SC.nextLine();
-			System.out.print("변경할 내용 : ");
+			System.out.print("수정할 내용 : ");
 			String content = Main.SC.nextLine();
 
 			PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -193,12 +194,12 @@ public class AnnouncementBoard {
 
 			if (result != 1) {
 				System.out.println("====================");
-				System.out.println("내용 수정에 실패하였습니다.");
+				System.out.println("공지사항 내용 수정 실패.");
 				System.out.println("====================");
 				return;
 			}
 			System.out.println("====================");
-			System.out.println("내용 수정이 완료되었습니다.");
+			System.out.println("공지사항 내용 수정 완료.");
 			System.out.println("====================");
 
 		}
@@ -209,7 +210,7 @@ public class AnnouncementBoard {
 
 		Connection conn = JDBCTemplate.getConn();
 
-		String sql = "SELECT NO, TITLE, ENROLL_DATE FROM ANNOUNCEMENT_BOARD WHERE DEL_YN = 'N'";
+		String sql = "SELECT NO, TITLE, ENROLL_DATE FROM ANNOUNCEMENT_BOARD WHERE DEL_YN = 'N' ORDER BY NO DESC";
 
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		ResultSet rs = pstmt.executeQuery();
@@ -224,14 +225,10 @@ public class AnnouncementBoard {
 			Vo = new AnnouncementBoardVo(no, title, null, null, enrollDate, null);
 			voList.add(Vo);
 		}
-		System.out.println("-----------------------------------------------------------------------");
-		System.out.printf("%-5s | %-12s | %-20s%n ", "번호", "제목", "작성일자");
 
-		for (AnnouncementBoardVo vo : voList) {
-			System.out.printf("%-5s | %-12s | %-20s%n", vo.getNo(), vo.getTitle(), vo.getEnrollDate());
-		}
-		System.out.println();
-		System.out.println("-----------------------------------------------------------------------");
+		TablePrinter.printTable(voList, new String[] { "no", "title", "enrollDate" },
+				new String[] { "번호", "제목", "생성일자" });
+
 	}
 
 	private void selectAnnouncementNo() throws Exception {
@@ -248,6 +245,7 @@ public class AnnouncementBoard {
 		ResultSet rs = pstmt.executeQuery();
 
 		AnnouncementBoardVo vo = null;
+		List<AnnouncementBoardVo> voList = new ArrayList<AnnouncementBoardVo>();
 		if (rs.next()) {
 			String no2 = rs.getString("NO");
 			String title = rs.getString("TITLE");
@@ -262,16 +260,15 @@ public class AnnouncementBoard {
 			vo.setWriterNo(nick);
 			vo.setEnrollDate(enrollDate);
 
-			System.out.println("-----------------------------------------------------------------------");
-			System.out.printf("%-5s | %-12s | %-20s | %-5s | %-20s%n ", "번호", "제목", "내용", "작성자", "작성일자");
-			System.out.printf("%-5s | %-12s | %-20s | %-5s | %-20s%n ", vo.getNo(), vo.getTitle(), vo.getContent(),
-					vo.getWriterNo(), vo.getEnrollDate());
-			System.out.println();
-			System.out.println("-----------------------------------------------------------------------");
+			voList.add(vo);
+
+			TablePrinter.printTable(voList, new String[] { "no", "title", "content", "writerNo", "enrollDate" },
+					new String[] { "번호", "제목", "내용", "작성자", "생성일자" });
 
 		} else if (vo == null) {
 			System.out.println("=======================");
-			System.out.println("해당 번호의 공지사항은 없습니다.");
+			System.out.println("공지사항 조회 실패.");
+			System.out.println("공지사항 번호 확인바람.");
 			System.out.println("=======================");
 		}
 
@@ -281,7 +278,7 @@ public class AnnouncementBoard {
 
 		Connection conn = JDBCTemplate.getConn();
 
-		String sql = "SELECT NO, TITLE, CONTENT, ENROLL_DATE FROM ANNOUNCEMENT_BOARD WHERE DEL_YN = 'N' AND TO_CHAR(ENROLL_DATE, 'YYYY\"년\" MM\"월\" DD\"일\"') LIKE '%' || ? || '%'";
+		String sql = "SELECT NO, TITLE, CONTENT, ENROLL_DATE FROM ANNOUNCEMENT_BOARD WHERE DEL_YN = 'N' AND TO_CHAR(ENROLL_DATE, 'YYYY\"년\" MM\"월\" DD\"일\"') LIKE '%' || ? || '%' ORDER BY NO ";
 
 		System.out.print("조회할 날짜 (0000년 00월 00일) : ");
 		String no = Main.SC.nextLine();
@@ -291,30 +288,24 @@ public class AnnouncementBoard {
 		ResultSet rs = pstmt.executeQuery();
 
 		List<AnnouncementBoardVo> voList = new ArrayList<AnnouncementBoardVo>();
-		AnnouncementBoardVo Vo = null;
+		AnnouncementBoardVo vo = null;
 		while (rs.next()) {
 			String no2 = rs.getString("NO");
 			String title = rs.getString("TITLE");
 			String content = rs.getString("CONTENT");
 			String enrollDate = rs.getString("ENROLL_DATE");
 
-			Vo = new AnnouncementBoardVo(no2, title, content, null, enrollDate, null);
-			voList.add(Vo);
+			vo = new AnnouncementBoardVo(no2, title, content, null, enrollDate, null);
+			voList.add(vo);
 		}
-		if (Vo == null) {
+		if (vo == null) {
 			System.out.println("=======================");
-			System.out.println("해당 날짜 공지사항은 없습니다.");
+			System.out.println("공지사항 조회 실패.");
+			System.out.println("날짜 재확인 바람.");
 			System.out.println("=======================");
 		} else {
-			System.out.println("-----------------------------------------------------------------------");
-			System.out.printf("%-5s | %-12s | %-20s | %-20s%n ", "번호", "제목", "내용", "작성일자");
-
-			for (AnnouncementBoardVo vo : voList) {
-				System.out.printf("%-5s | %-12s | %-20s | %-20s%n ", vo.getNo(), vo.getTitle(), vo.getContent(),
-						vo.getEnrollDate());
-			}
-			System.out.println();
-			System.out.println("-----------------------------------------------------------------------");
+			TablePrinter.printTable(voList, new String[] { "no", "title", "content", "enrollDate" },
+					new String[] { "번호", "제목", "내용", "생성일자" });
 		}
 
 	}

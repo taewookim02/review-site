@@ -120,21 +120,21 @@ public class MemberController {
 	private void banMember() {
 		try {
 			Connection conn = JDBCTemplate.getConn();
-			String sql = "UPDATE MEMBER SET QUIT_YN = 'Y' WHERE NO = ?";
+			String sql = "UPDATE MEMBER SET QUIT_YN = 'Y' WHERE NO = ? AND ADMIN_YN ='N'";
 			PreparedStatement pstmt = conn.prepareStatement(sql);
-			
+
 			System.out.print("탈퇴시킬 회원번호: ");
 			String inputNo = Main.SC.nextLine();
-			pstmt.setString(1, inputNo );
-			
+			pstmt.setString(1, inputNo);
+
 			int r = pstmt.executeUpdate();
-			
+
 			if (r != 1) {
-				System.out.println("탈퇴과정 실패");
+				System.out.println("탈퇴 실패");
 				return;
 			}
-			
-			System.out.println("탈퇴과정 성공!");
+
+			System.out.println("탈퇴 과정 성공");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -164,7 +164,9 @@ public class MemberController {
 			System.out.println("=============");
 			return;
 		default:
-			System.out.println("잘못 입력하셨습니다.");
+			System.out.println("=============");
+			System.out.println("잘못 입력하셨습니다");
+			System.out.println("=============");
 			break;
 		}
 	}
@@ -181,6 +183,7 @@ public class MemberController {
 
 			ResultSet rs = pstmt.executeQuery();
 			MemberVo vo = null;
+			ArrayList<MemberVo> voList = new ArrayList<>();
 			if (rs.next()) {
 				String no = rs.getString("NO");
 				String id = rs.getString("ID");
@@ -191,6 +194,7 @@ public class MemberController {
 				String quitYn = rs.getString("QUIT_YN");
 				String adminYn = rs.getString("ADMIN_YN");
 				vo = new MemberVo(no, id, pwd, nick, joinDate, modifyDate, quitYn, adminYn);
+				voList.add(vo);
 			}
 
 			if (vo == null) {
@@ -200,16 +204,18 @@ public class MemberController {
 				return;
 			}
 
-			System.out.println("-".repeat(99));
+			TablePrinter.printTable(voList, new String[] { "no", "id", "pwd", "nick", "join_date", "modify_date", "quit_yn", "admin_yn" },
+					new String[] { "No", "ID", "Password", "Nick", "Join Date", "Modify Date", "Quit", "Admin" });
 
-			String joinDateFormatted = vo.getJoin_date().split(" ")[0];
-			String modifyDateDays = vo.getModify_date() == null ? "null" : vo.getModify_date().split(" ")[0];
-
-			System.out.printf("%-5s | %-15s | %-10s | %-15s | %-15s | %-5s | %-5s%n", "No", "Id", "Password",
-					"Joined Date", "Modify Date", "Quit", "Admin");
-			System.out.printf("%-5s | %-15s | %-10s | %-15s | %-15s | %-5s | %-5s%n", vo.getNo(), vo.getId(),
-					vo.getPwd(), joinDateFormatted, modifyDateDays, vo.getQuit_yn(), vo.getAdmin_yn());
-			System.out.println("-".repeat(99));
+//			System.out.println("-".repeat(99));
+//			String joinDateFormatted = vo.getJoin_date().split(" ")[0];
+//			String modifyDateDays = vo.getModify_date() == null ? "null" : vo.getModify_date().split(" ")[0];
+//
+//			System.out.printf("%-5s | %-15s | %-10s | %-15s | %-15s | %-5s | %-5s%n", "No", "Id", "Password",
+//					"Joined Date", "Modify Date", "Quit", "Admin");
+//			System.out.printf("%-5s | %-15s | %-10s | %-15s | %-15s | %-5s | %-5s%n", vo.getNo(), vo.getId(),
+//					vo.getPwd(), joinDateFormatted, modifyDateDays, vo.getQuit_yn(), vo.getAdmin_yn());
+//			System.out.println("-".repeat(99));
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -248,19 +254,10 @@ public class MemberController {
 				return;
 			}
 
-			System.out.println("-".repeat(99));
-			System.out.printf("%-5s | %-15s | %-10s | %-15s | %-15s | %-5s | %-5s%n", "No", "Id", "Password",
-					"Joined Date", "Modify Date", "Quit", "Admin");
-			for (MemberVo reVo : voList) {
-				System.out.println("-".repeat(99));
-
-				String joinDateFormatted = reVo.getJoin_date().split(" ")[0];
-				String modifyDateDays = reVo.getModify_date() == null ? "null" : reVo.getModify_date().split(" ")[0];
-
-				System.out.printf("%-5s | %-15s | %-10s | %-15s | %-15s | %-5s | %-5s%n", reVo.getNo(), reVo.getId(),
-						reVo.getPwd(), joinDateFormatted, modifyDateDays, reVo.getQuit_yn(), reVo.getAdmin_yn());
-			}
-			System.out.println("-".repeat(99));
+			TablePrinter.printTable(voList, new String[] { "no", "id", "nick", "join_date" },
+					new String[] { "No", "ID", "Nickname", "Join Date" });
+//			TablePrinter.printRecordsVertically(voList, new String[] { "no", "id", "nick", "join_date" },
+//					new String[] { "No", "ID", "Nickname", "Join Date" });
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -298,11 +295,10 @@ public class MemberController {
 				System.out.println("=============");
 				return;
 			}
-			StringBuilder sb = new StringBuilder();
-			sb.append("ㅎㅇ");
-			TablePrinter.printTable(voList, new String[] {"no", "id", "pwd", "nick", "modify_date", "quit_yn"});
-//			TablePrinter.printTable(voList, new String[] {"no", "id", "pwd", "nick", "modify_date", "quit_yn"},
-//					new String[] {"No", "Id", "비밀번호", "닉네임", "수정날짜", "탈퇴여부"});
+
+			TablePrinter.printTable(voList, new String[] { "no", "id", "pwd", "nick", "modify_date", "quit_yn" },
+					new String[] { "NO. ", "ID", "Password", "Nick", "Modify Date", "Quit" });
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

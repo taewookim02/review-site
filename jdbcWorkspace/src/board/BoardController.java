@@ -51,7 +51,9 @@ public class BoardController {
 		case "8":
 			return;
 		default:
+			System.out.println("==============");
 			System.out.println("잘못 입력하셨습니다.");
+			System.out.println("==============");
 		}
 
 	}
@@ -59,7 +61,9 @@ public class BoardController {
 	private void write() throws Exception {
 
 		if (Main.loginMember == null) {
+			System.out.println("====================");
 			System.out.println("로그인 후 이용 가능합니다.");
+			System.out.println("====================");
 			return;
 		}
 
@@ -80,17 +84,23 @@ public class BoardController {
 		int result = pstmt.executeUpdate();
 
 		if (result != 1) {
+			System.out.println("====================");
 			System.out.println("게시글 작성 실패하셨습니다.");
+			System.out.println("====================");
 			return;
 		}
+		System.out.println("====================");
 		System.out.println("게시글 작성 성공하셨습니다.");
+		System.out.println("====================");
 
 	}
 
 	private void delete() throws Exception {
 
 		if (Main.loginMember == null) {
+			System.out.println("===================");
 			System.out.println("로그인 후 이용 가능합니다.");
+			System.out.println("===================");
 			return;
 		}
 
@@ -116,10 +126,14 @@ public class BoardController {
 		int result = pstmt.executeUpdate();
 
 		if (result != 1) {
+			System.out.println("============================================");
 			System.out.println("자신의 게시물 또는 삭제되지 않은 게시물만 삭제할 수 있습니다.");
+			System.out.println("============================================");
 			return;
 		}
+		System.out.println("=================");
 		System.out.println("게시물이 삭제되었습니다.");
+		System.out.println("=================");
 	}
 
 	private void adminDelete() throws Exception {
@@ -136,15 +150,21 @@ public class BoardController {
 		int result = pstmt.executeUpdate();
 
 		if (result != 1) {
+			System.out.println("===============================");
 			System.out.println("삭제되지 않은 게시물만 삭제할 수 있습니다.");
+			System.out.println("===============================");
 			return;
 		}
+		System.out.println("==================");
 		System.out.println("게시물이 삭제되었습니다.");
+		System.out.println("==================");
 	}
 
 	private void editTitle() throws Exception {
 		if (Main.loginMember == null) {
+			System.out.println("===================");
 			System.out.println("로그인 후 이용 가능합니다.");
+			System.out.println("===================");
 			return;
 		}
 
@@ -175,10 +195,14 @@ public class BoardController {
 		int result = pstmt.executeUpdate();
 
 		if (result != 1) {
+			System.out.println("=============================================");
 			System.out.println("자신의 게시물 또는 삭제되지 않은 게시물만 변경할 수 있습니다.");
+			System.out.println("=============================================");
 			return;
 		}
+		System.out.println("==========================");
 		System.out.println("해당 게시물의 제목이 변경되었습니다.");
+		System.out.println("==========================");
 
 	}
 
@@ -200,16 +224,22 @@ public class BoardController {
 		int result = pstmt.executeUpdate();
 
 		if (result != 1) {
+			System.out.println("===============================");
 			System.out.println("삭제되지 않은 게시물만 변경할 수 있습니다.");
+			System.out.println("===============================");
 			return;
 		}
+		System.out.println("============================");
 		System.out.println("해당 게시물의 제목이 변경되었습니다.");
+		System.out.println("============================");
 
 	}
 
 	private void editContent() throws Exception {
 		if (Main.loginMember == null) {
+			System.out.println("====================");
 			System.out.println("로그인 후 이용 가능합니다.");
+			System.out.println("====================");
 			return;
 		}
 
@@ -240,11 +270,14 @@ public class BoardController {
 		int result = pstmt.executeUpdate();
 
 		if (result != 1) {
+			System.out.println("=============================================");
 			System.out.println("자신의 게시물 또는 삭제되지 않은 게시물만 변경할 수 있습니다.");
+			System.out.println("=============================================");
 			return;
 		}
+		System.out.println("============================");
 		System.out.println("해당 게시물의 내용이 변경되었습니다.");
-
+		System.out.println("============================");
 	}
 
 	private void adminEditContent() throws Exception {
@@ -265,10 +298,14 @@ public class BoardController {
 		int result = pstmt.executeUpdate();
 
 		if (result != 1) {
+			System.out.println("===============================");
 			System.out.println("삭제되지 않은 게시물만 변경할 수 있습니다.");
+			System.out.println("===============================");
 			return;
 		}
+		System.out.println("============================");
 		System.out.println("해당 게시물의 내용이 변경되었습니다.");
+		System.out.println("============================");
 
 	}
 
@@ -332,20 +369,32 @@ public class BoardController {
 			voList.add(bVo);
 
 		}
-
-		System.out.println("-----------------------------------------------------------------------");
-		System.out.printf("%-4s | %-8s | %-12s | %-16s ", "게시물 번호", "작성자 번호", "제목", "작성일자");
-		for (BoardVo vo : voList) {
+		if (bVo == null) {
+			System.out.println("==================");
+			System.out.println("정확하게 입력 바랍니다.");
+			System.out.println("==================");
+		} else {
+			System.out.println("-----------------------------------------------------------------------");
+			System.out.printf("%-4s | %-8s | %-12s | %-16s ", "게시물 번호", "작성자 번호", "제목", "작성일자");
+			for (BoardVo vo : voList) {
+				System.out.println();
+				System.out.printf("%-8s | %-9s | %-12s | %-20s ", vo.getNo(), vo.getWriterNo(), vo.getTitle(),
+						vo.getEnrollDate());
+			}
 			System.out.println();
-			System.out.printf("%-8s | %-9s | %-12s | %-20s ", vo.getNo(), vo.getWriterNo(), vo.getTitle(),
-					vo.getEnrollDate());
+			System.out.println("-----------------------------------------------------------------------");
 		}
-		System.out.println();
-		System.out.println("-----------------------------------------------------------------------");
 
 	}
 
 	private void selectMyBoard() throws Exception {
+
+		if (Main.loginMember == null) {
+			System.out.println("====================");
+			System.out.println("로그인 후 이용 가능합니다.");
+			System.out.println("====================");
+			return;
+		}
 
 		Connection conn = JDBCTemplate.getConn();
 
@@ -367,14 +416,20 @@ public class BoardController {
 			voList.add(bVo);
 
 		}
-		System.out.println("-----------------------------------------------------------------------");
-		System.out.printf("%-4s | %-12s | %-18s ", "번호", "제목", "작성일자");
-		for (BoardVo vo : voList) {
+		if (bVo == null) {
+			System.out.println("=====================");
+			System.out.println("작성하신 게시물이 없습니다.");
+			System.out.println("=====================");
+		} else {
+			System.out.println("-----------------------------------------------------------------------");
+			System.out.printf("%-4s | %-12s | %-18s ", "번호", "제목", "작성일자");
+			for (BoardVo vo : voList) {
+				System.out.println();
+				System.out.printf("%-5s | %-12s | %-20s ", vo.getNo(), vo.getTitle(), vo.getEnrollDate());
+			}
 			System.out.println();
-			System.out.printf("%-5s | %-12s | %-20s ", vo.getNo(), vo.getTitle(), vo.getEnrollDate());
+			System.out.println("-----------------------------------------------------------------------");
 		}
-		System.out.println();
-		System.out.println("-----------------------------------------------------------------------");
 
 	}
 

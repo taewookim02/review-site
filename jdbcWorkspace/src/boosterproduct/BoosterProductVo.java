@@ -1,7 +1,7 @@
 package boosterproduct;
 
 public class BoosterProductVo {
-	
+
 	public BoosterProductVo() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -22,38 +22,47 @@ public class BoosterProductVo {
 		return "BoosterProductVo [boosterProdNo=" + boosterProdNo + ", name=" + name + ", price=" + price
 				+ ", isDiscountinuedYn=" + isDiscountinuedYn + ", description=" + description + "]";
 	}
-	
+
 	public String getBoosterProdNo() {
 		return boosterProdNo;
 	}
+
 	public void setBoosterProdNo(String boosterProdNo) {
 		this.boosterProdNo = boosterProdNo;
 	}
+
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	public String getPrice() {
 		return price;
 	}
+
 	public void setPrice(String price) {
 		this.price = price;
 	}
+
 	public String getIsDiscountinuedYn() {
 		return isDiscountinuedYn;
 	}
+
 	public void setIsDiscountinuedYn(String isDiscountinuedYn) {
 		this.isDiscountinuedYn = isDiscountinuedYn;
 	}
+
 	public String getDescription() {
 		return description;
 	}
+
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
+
 	private String boosterProdNo;
 	private String name;
 	private String price;

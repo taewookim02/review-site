@@ -53,7 +53,7 @@ public class BoosterReviewController {
 			try {
 				Connection conn = JDBCTemplate.getConn();
 
-				String sql = "SELECT BOOSTER_REVIEW_NO, REVIEW_TITLE, M.NICK, ENROLL_DATE FROM BOOSTER_REVIEW R JOIN MEMBER M ON R.MEMBER_NO = M.NO";
+				String sql = "SELECT BOOSTER_REVIEW_NO, REVIEW_TITLE, M.NICK, ENROLL_DATE FROM BOOSTER_REVIEW R JOIN MEMBER M ON R.MEMBER_NO = M.NO WHERE R.QUIT_YN = 'N'";
 
 				PreparedStatement pstmt = conn.prepareStatement(sql);
 				ResultSet rs = pstmt.executeQuery();

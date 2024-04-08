@@ -35,11 +35,6 @@ public void printMenu() throws Exception{
 	
 public void lookUpRecent() throws Exception{
 	
-	if(Main.loginMember == null) {
-		System.out.println("로그인이 필요 합니다");
-		return;
-	}
-	
 	Connection conn = JDBCTemplate.getConn();
 	
 	String sql = "SELECT * FROM FOOD_PRODUCT ORDER BY FOOD_PROD_NO DESC";
@@ -151,6 +146,11 @@ public void lookUpName() throws Exception{
 
 
 public void addFood() throws Exception{
+	
+	if(Main.loginMember == null) {
+		System.out.println("로그인이 필요 합니다");
+		return;
+	}
 	
 	Connection conn = JDBCTemplate.getConn();
 	

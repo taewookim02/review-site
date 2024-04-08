@@ -40,10 +40,6 @@ public class NormalProdController {
 
 	private void lookUpRecent() throws Exception {
 		
-		if(Main.loginMember == null) {
-			System.out.println("로그인이 필요 합니다");
-			return;
-		}
 		
 		Connection conn = JDBCTemplate.getConn();
 		
@@ -153,10 +149,11 @@ public class NormalProdController {
 	}
 
 	private void addNormal() throws Exception {
-//		if(Main.loginMember == null) {
-//			System.out.println("로그인 먼저 이용해주세요");
-//			return;
-//		}
+//		
+		if(Main.loginMember == null) {
+			System.out.println("로그인이 필요 합니다");
+			return;
+		}
 //		
 		Connection conn = JDBCTemplate.getConn();
 

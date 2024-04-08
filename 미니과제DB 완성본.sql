@@ -164,8 +164,15 @@ ADD CONSTRAINT FK_MEMBER_TO_ANNOUNCEMENT_BOARD_NO FOREIGN KEY (WRITER_NO)REFEREN
 --------------------------------
 ---------- ?ç∞?ù¥?Ñ∞ ?ÇΩ?ûÖ -----------
 --------------------------------
-INSERT INTO MEMBER(NO, ID, PWD, NICK, ADMIN_YN) VALUES(SEQ_MEMBER_NO.NEXTVAL, 'admin', '1234', '∞¸∏Æ¿⁄', 'Y'); -- Í¥?Î¶¨ÏûêÍ≥ÑÏ†ï ?ÇΩ?ûÖ
 
+-------------æ∆¿Ãµ √ﬂ∞°-------------
+INSERT INTO MEMBER(NO, ID, PWD, NICK, ADMIN_YN) VALUES(SEQ_MEMBER_NO.NEXTVAL, 'admin', '1234', '∞¸∏Æ¿⁄', 'Y'); -- Í¥?Î¶¨ÏûêÍ≥ÑÏ†ï ?ÇΩ?ûÖ
+INSERT INTO MEMBER(NO, ID, PWD, NICK) VALUES(SEQ_MEMBER_NO.NEXTVAL, 'nyamnyam', '1234', 'nyamgu'); 
+INSERT INTO MEMBER(NO, ID, PWD, NICK) VALUES(SEQ_MEMBER_NO.NEXTVAL, 'gugu', '1234', 'gugu'); 
+INSERT INTO MEMBER(NO, ID, PWD, NICK) VALUES(SEQ_MEMBER_NO.NEXTVAL, 'user03', '1234', 'nick03'); 
+INSERT INTO MEMBER(NO, ID, PWD, NICK) VALUES(SEQ_MEMBER_NO.NEXTVAL, 'user04', '1234', 'nicknick'); 
+INSERT INTO MEMBER(NO, ID, PWD, NICK) VALUES(SEQ_MEMBER_NO.NEXTVAL, 'user05', 'password', 'nicksix'); 
+INSERT INTO MEMBER(NO, ID, PWD, NICK) VALUES(SEQ_MEMBER_NO.NEXTVAL, 'hoho', '1234', 'hehe'); 
 COMMIT;
 
 

@@ -70,8 +70,6 @@ public class BoosterProductController {
 		this.description = description;
 				 * */
 
-				TablePrinter.printRecordsVertically( arr, new String[] {"boosterProdNo", "name", "price", "isDiscountinuedYn", "description"}
-					,new String[] {"제품번호", "제품명", "가격", "단종 여부", "제품 설명"});
 				
 				
 //				System.out.println("----------------------------");
@@ -81,6 +79,9 @@ public class BoosterProductController {
 //				System.out.printf(" 제품설명 : " + vo.getDescription());
 //				System.out.println("----------------------------");
 			}
+			
+			TablePrinter.printRecordsVertically( arr, new String[] {"boosterProdNo", "name", "price", "isDiscountinuedYn", "description"}
+			,new String[] {"제품번호", "제품명", "가격", "단종 여부", "제품 설명"});
 			
 	
 

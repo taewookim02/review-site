@@ -37,7 +37,7 @@ public class BoosterProductController {
 
 		try {
 			Connection conn = JDBCTemplate.getConn();
-			String sql = "SELECT * FROM BOOSTER_PRODUCT";
+			String sql = "SELECT * FROM BOOSTER_PRODUCT ORDER BY BOOSTER_PROD_NO DESC";
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 
 			ResultSet rs = pstmt.executeQuery();
